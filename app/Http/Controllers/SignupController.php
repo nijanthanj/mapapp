@@ -14,22 +14,24 @@ class SignupController extends Controller
     {          
         $register = new Register();
         
-        $register->user_email = $request->email;     
+             
         $register->user_fname = $request->fname;   
         $register->user_lname = $request->lname;
-        $register->password = md5($request->password);
+        $register->user_email = $request->email;
+        $register->password = md5($request->passwrd); 
+        $register->mobile =$request->mob;
         $register->city = $request->city;     
-        
-        $extension = '.jpg';
-        $filename = $register->id.$extension;
-        $register->reg_cert = $filename;   
-        $register->insurance = $filename;
-        $register->permit    = $filename;
-        $register->license = $filename;
-        $register->status = $filename;
+        $register->type = $request->type;
+        // $extension = '.jpg';
+        // $filename = $register->id.$extension;
+        // $register->reg_cert = $filename;   
+        // $register->insurance = $filename;
+        // $register->permit    = $filename;
+        // $register->license = $filename;
+        $register->status = 'pending';
 
         if($register->save()){            
-            Storage::disk('local')->put($filename, base64_decode($request->RC));            
+            //Storage::disk('local')->put($filename, base64_decode($request->RC));            
 
             $res = [
                 'success' => 'Registered successfully',
