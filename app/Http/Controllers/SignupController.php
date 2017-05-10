@@ -12,26 +12,55 @@ class SignupController extends Controller
 {
     public function signup(Request $request)
     {          
-        $register = new Register();
+        $register = new Register();        
         
-             
         $register->user_fname = $request->fname;   
         $register->user_lname = $request->lname;
         $register->user_email = $request->email;
         $register->password = md5($request->passwrd); 
         $register->mobile =$request->mob;
         $register->city = $request->city;     
-        $register->type = $request->type;
-        // $extension = '.jpg';
-        // $filename = $register->id.$extension;
-        // $register->reg_cert = $filename;   
-        // $register->insurance = $filename;
-        // $register->permit    = $filename;
-        // $register->license = $filename;
-        $register->status = 'pending';
+        $register->user_type = $request->type;
+        $register->status = 'pending';             
+        
+
+        $extension = '.jpg';
+        if($request->drvlc){
+            $filename = md5($request->email).'_drvlc'.$extension;
+            $register->license = $filename;               
+        }
+        if($request->cominsur){
+            $filename = md5($request->email).'_cominsur'.$extension;
+            $register->insurance = $filename;             
+        }
+        if($request->certreg){
+            $filename = md5($request->email).'_certreg'.$extension;
+            $register->permit = $filename;              
+        }
+        if($request->carpermt){
+            $filename = md5($request->email).'_carpermt'.$extension;
+            $register->reg_cert = $filename;            
+        }   
 
         if($register->save()){            
-            //Storage::disk('local')->put($filename, base64_decode($request->RC));            
+
+            $extension = '.jpg';
+            if($request->drvlc){
+                $filename = md5($request->email).'_drvlc'.$extension;
+                Storage::disk('local')->put($filename, base64_decode($request->drvlc));            
+            }
+            if($request->cominsur){
+                $filename = md5($request->email).'_cominsur'.$extension;
+                Storage::disk('local')->put($filename, base64_decode($request->cominsur));            
+            }
+            if($request->certreg){
+                $filename = md5($request->email).'_certreg'.$extension;
+                Storage::disk('local')->put($filename, base64_decode($request->certreg));            
+            }
+            if($request->carpermt){
+                $filename = md5($request->email).'_carpermt'.$extension;
+                Storage::disk('local')->put($filename, base64_decode($request->carpermt));            
+            }            
 
             $res = [
                 'success' => 'Registered successfully',
