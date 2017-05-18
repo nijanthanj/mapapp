@@ -11,11 +11,15 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'DashboardController@welcome');
 
 Route::post('/signup/validate', 'SignupController@checkemail');
 Route::post('/signup/register', 'SignupController@signup');
 Route::post('/signup/city', 'SignupController@citylist');
-Route::post('/signup/profile_photo', 'SignupController@profilePhoto');
+Route::post('/login', 'SignupController@login');
+Route::post('/forgot', 'SignupController@forgot');
+Route::post('/aprrove', 'SignupController@aprrove');
+
+Route::post('/trip_notify', 'TripController@trip_notify');
+
+

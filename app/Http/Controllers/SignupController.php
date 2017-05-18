@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Storage;
 use League\Flysystem\Filesystem;
 use App\Register;
+use App\City;
 
 class SignupController extends Controller
 {
@@ -40,6 +41,10 @@ class SignupController extends Controller
         if($request->carpermt){
             $filename = md5($request->email).'_carpermt'.$extension;
             $register->reg_cert = $filename;            
+        } 
+        if($request->profile_photo){
+            $filename = md5($request->email).'_profile_photo'.$extension;
+            $register->profile_photo = $filename;          
         }   
 
         if($register->save()){            
@@ -60,7 +65,11 @@ class SignupController extends Controller
             if($request->carpermt){
                 $filename = md5($request->email).'_carpermt'.$extension;
                 Storage::disk('local')->put($filename, base64_decode($request->carpermt));            
-            }            
+            }  
+            if($request->profile_photo){
+                $filename = md5($request->email).'_profile_photo'.$extension;
+                Storage::disk('local')->put($filename, base64_decode($request->profile_photo));            
+            }           
 
             $res = [
                 'success' => 'Registered successfully',
@@ -86,23 +95,49 @@ class SignupController extends Controller
        	return json_encode($res);
     }
 
-    public function profilePhoto(Request $request)
+    public function login(Request $request)
     {
-        $profile_photo = $request->profile_photo;
-        $extension = '.jpg';
-        $filename = 'pic'.$extension;
-        Storage::disk('local')->put($filename, base64_decode($profile_photo));            
-        $res = [
-            'success' => 'Profile picture uploaded successfully',
-            'error' => ''
-        ];
+        $register = new Register();
+        $where = ['user_email' => $request->email, 'password' => md5($request->password)];
+        $count = $register::where($where)->count();
+        
+        if($count) {
+            $res = [
+                'success' => 'Logged in successfully',
+                'error' => ''
+            ];
+        }else{
+            $res = [
+                'success' => '',
+                'error' => 'Username or password is incorrect'
+            ];
+        }
+        return json_encode($res);
+    }
+
+    public function forgot(Request $request)
+    {
+        $register = new Register();
+        $where = ['user_email' => $request->email];
+        $count = $register::where($where)->count();
+        
+        if($count) {
+            $res = [
+                'success' => 'Your password sent to your registered email address',
+                'error' => ''
+            ];
+        }else{
+            $res = [
+                'success' => '',
+                'error' => 'Email address not exits'
+            ];
+        }
         return json_encode($res);
     }
 
     public function citylist(Request $request)
     {        
-        $res = ['Chennai','Banglore','Trichy','Coimbatore'      	
-        ];
-       	return json_encode($res);
+        $city = new city();
+        return $citylist = $city->pluck('city_name');   
     }
 }
