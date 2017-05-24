@@ -110,8 +110,8 @@ class SignupController extends Controller
             ];
         }else{
             $res = [
-                'success' => '',
-                'error' => 'Email and phone number validated successfully'
+                'success' => 'Email and phone number validated successfully',
+                'error' => ''
             ];
         }
         
