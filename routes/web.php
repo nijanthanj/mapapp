@@ -19,6 +19,7 @@ Route::post('/signup/city', 'SignupController@citylist');
 Route::post('/login', 'SignupController@login');
 Route::post('/forgot', 'SignupController@forgot');
 Route::post('/aprrove', 'SignupController@aprrove');
+Route::post('/status', 'SignupController@status');
 
 Route::post('/trip_notify', 'TripController@trip_notify');
 

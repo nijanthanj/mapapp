@@ -86,12 +86,36 @@ class SignupController extends Controller
 
     public function checkemail(Request $request)
     {
-        $mail = $request->email;
-        $mobile = $request->mobile;
-        $res = [
-        	'success' => 'Email and phone number validated',
-        	'error' => ''
-        ];
+        $register = new Register();
+        $where_email = ['user_email' => $request->email];
+        $count_email = $register::where($where_email)->count();
+
+        $where_ph = ['mobile' => $request->mobile];
+        $count_ph = $register::where($where_ph)->count();
+
+        if($count_email && $count_ph) {
+            $res = [
+            'error' => 'Email and phone number already exists',
+            'success' => ''
+            ];
+        }else if($count_email) {
+            $res = [
+            'error' => 'Email already exists',
+            'success' => ''
+            ];
+        }else if($count_ph) {
+            $res = [
+            'error' => 'Phone number already exists',
+            'success' => ''
+            ];
+        }else{
+            $res = [
+                'success' => '',
+                'error' => 'Email and phone number validated successfully'
+            ];
+        }
+        
+        
        	return json_encode($res);
     }
 
@@ -139,5 +163,47 @@ class SignupController extends Controller
     {        
         $city = new city();
         return $citylist = $city->pluck('city_name');   
+    }
+
+    public function status(Request $request)
+    {        
+        $register = new Register();
+        $where = ['user_email' => $request->email];
+        $result = $register::where($where)->update(['online_status' => $request->online_status]);
+
+        if($result) {
+            $res = [
+                'success' => 'Status updated successfully',
+                'error' => ''
+            ];
+        }else{
+            $res = [
+                'success' => '',
+                'error' => 'Internal server error'
+            ];
+        }
+
+        return json_encode($res);
+    }
+
+    public function aprrove(Request $request)
+    {        
+        $register = new Register();
+        $where = ['user_email' => $request->email];
+        $result = $register::where($where)->update(['status' => $request->status]);
+
+        if($result) {
+            $res = [
+                'success' => 'Status updated successfully',
+                'error' => ''
+            ];
+        }else{
+            $res = [
+                'success' => '',
+                'error' => 'Internal server error'
+            ];
+        }
+
+        return json_encode($res);
     }
 }
