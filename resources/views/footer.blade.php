@@ -1,4 +1,4 @@
-            <footer class="main-footer">
+            <footer class="main-footer" style="margin-left: 0px;">
                 <div class="pull-right hidden-xs"> <b>Version</b> 1.0</div>
                 <strong>Copyright &copy; 2016-2017 <a href="#">bdtask</a>.</strong> All rights reserved. <i class="fa fa-heart color-green"></i>
             </footer>
@@ -55,18 +55,6 @@
                 "use strict"; // Start of use strict
 
                 // notification
-                setTimeout(function () {
-                    toastr.options = {
-                        closeButton: true,
-                        progressBar: true,
-                        showMethod: 'slideDown',
-                        timeOut: 4000
-//                        positionClass: "toast-top-left"
-                    };
-                    toastr.success('Responsive Admin Theme', 'Welcome to AdminBD');
-
-                }, 1300);
-
                 //counter
                 $('.count-number').counterUp({
                     delay: 10,

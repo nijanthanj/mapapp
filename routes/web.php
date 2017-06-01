@@ -11,7 +11,8 @@
 |
 */
 
-Route::get('/', 'DashboardController@welcome');
+Route::get('/', 'DashboardController@login');
+Route::get('/welcome', 'DashboardController@welcome');
 
 Route::post('/signup/validate', 'SignupController@checkemail');
 Route::post('/signup/register', 'SignupController@signup');
@@ -22,5 +23,10 @@ Route::post('/aprrove', 'SignupController@aprrove');
 Route::post('/status', 'SignupController@status');
 
 Route::post('/trip_notify', 'TripController@trip_notify');
+Route::post('/trip_notify_driver', 'TripController@trip_notify_driver');
+
+
+Route::get('/booking', 'TripController@booking');
+Route::get('/newuser', 'SignupController@userlist');
 
 

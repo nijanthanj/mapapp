@@ -57,9 +57,9 @@
     </head>
     <body class="hold-transition sidebar-mini">
         <!-- Site wrapper -->
-        <div class="wrapper">
-            <header class="main-header"> 
-                <a href="index.html" class="logo"> <!-- Logo -->
+        <div class="">
+            <header class="main-header" style="top: 0;width: 100%;position: fixed;">  
+                <a href="<?php echo URL::to('/');?>/welcome" class="logo"> <!-- Logo -->
                     <span class="logo-mini">
                         <!--<b>A</b>BD-->
                         <img src="assets/dist/img/mini-logo.png" alt="">

@@ -123,11 +123,13 @@ class SignupController extends Controller
     {
         $register = new Register();
         $where = ['user_email' => $request->email, 'password' => md5($request->password)];
-        $count = $register::where($where)->count();
+        $count = $register::where($where)->pluck('user_id');
+        
         
         if($count) {
             $res = [
                 'success' => 'Logged in successfully',
+                'driver_id' => $count,
                 'error' => ''
             ];
         }else{
@@ -205,5 +207,15 @@ class SignupController extends Controller
         }
 
         return json_encode($res);
+    }
+
+    public function userlist(Request $request)
+    {
+        $register = new Register();
+        $where = ['user_type' => 'manager'];
+        $result = $register::where($where)->get();
+
+        return view('user_list', ['user_list' =>  $result]);
+        
     }
 }
