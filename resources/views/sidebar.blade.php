@@ -21,6 +21,10 @@
                         <li class="active">
                             <a href="<?php echo URL::to('/');?>/newuser"><i class="ti-user"></i> <span>Manager</span>                                
                             </a>
+                        </li> 
+                        <li class="active">
+                            <a href="<?php echo URL::to('/');?>/booking"><i class="fa fa-taxi"></i> <span>Booking</span>                                
+                            </a>
                         </li>                        
                     </ul>
                 </div> <!-- /.sidebar -->

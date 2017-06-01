@@ -223,7 +223,7 @@
                                 <ul class="dropdown-menu">
                                     <li><a href="profile.html"><i class="pe-7s-users"></i> User Profile</a></li>
                                     <li><a href="#"><i class="pe-7s-settings"></i> Settings</a></li>
-                                    <li><a href="login.html"><i class="pe-7s-key"></i> Logout</a></li>
+                                    <li><a href="<?php echo URL::to('/');?>/"><i class="pe-7s-key"></i> Logout</a></li>
                                 </ul>
                             </li>
                         </ul>
