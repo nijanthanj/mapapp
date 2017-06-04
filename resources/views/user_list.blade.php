@@ -9,8 +9,7 @@
                     <tr>
                         <th>Name</th>
                         <th>Email</th>
-                        <th>Mobile</th>
-                        <th>Onine Status</th>
+                        <th>Mobile</th>                        
                     </tr>
                 </thead>
                 <tbody>
@@ -18,8 +17,7 @@
                         <tr>                            
                             <td>{{$user_list->user_fname}} {{$user_list->user_lname}}</td>
                             <td>{{$user_list->user_email}}</td>
-                            <td>{{$user_list->mobile}}</td>
-                            <td>{{$user_list->online_status}}</td>                                                                       
+                            <td>{{$user_list->mobile}}</td>                                                                                               
                         </tr>
                     @endforeach
 

@@ -7,15 +7,9 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-        <title>Bdtask - Bootstrap Admin Template Dashboard</title>
+        <title>Admin Template Dashboard</title>
 
-        <!-- Favicon and touch icons -->
-        <link rel="shortcut icon" href="assets/dist/img/ico/favicon.png" type="image/x-icon">
-        <link rel="apple-touch-icon" type="image/x-icon" href="assets/dist/img/ico/apple-touch-icon-57-precomposed.png">
-        <link rel="apple-touch-icon" type="image/x-icon" sizes="72x72" href="assets/dist/img/ico/apple-touch-icon-72-precomposed.png">
-        <link rel="apple-touch-icon" type="image/x-icon" sizes="114x114" href="assets/dist/img/ico/apple-touch-icon-114-precomposed.png">
-        <link rel="apple-touch-icon" type="image/x-icon" sizes="144x144" href="assets/dist/img/ico/apple-touch-icon-144-precomposed.png">
-
+        
         <!-- Start Global Mandatory Style
         =====================================================================-->
         <!-- jquery-ui css -->
@@ -25,9 +19,9 @@
         <!-- Bootstrap rtl -->
         <!--<link href="assets/bootstrap-rtl/bootstrap-rtl.min.css" rel="stylesheet" type="text/css"/>-->
         <!-- Lobipanel css -->
-        <link href="assets/plugins/lobipanel/lobipanel.min.css" rel="stylesheet" type="text/css"/>
+        <!-- <link href="assets/plugins/lobipanel/lobipanel.min.css" rel="stylesheet" type="text/css"/> -->
         <!-- Pace css -->
-        <link href="assets/plugins/pace/flash.css" rel="stylesheet" type="text/css"/>
+        <!-- <link href="assets/plugins/pace/flash.css" rel="stylesheet" type="text/css"/> -->
         <!-- Font Awesome -->
         <link href="assets/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
         <!-- Pe-icon -->
@@ -39,9 +33,9 @@
         <!-- Start page Label Plugins 
         =====================================================================-->
         <!-- Toastr css -->
-        <link href="assets/plugins/toastr/toastr.css" rel="stylesheet" type="text/css"/>
+        <!-- <link href="assets/plugins/toastr/toastr.css" rel="stylesheet" type="text/css"/> -->
         <!-- Emojionearea -->
-        <link href="assets/plugins/emojionearea/emojionearea.min.css" rel="stylesheet" type="text/css"/>
+        <!-- <link href="assets/plugins/emojionearea/emojionearea.min.css" rel="stylesheet" type="text/css"/> -->
         <!-- Monthly css -->
         <link href="assets/plugins/monthly/monthly.css" rel="stylesheet" type="text/css"/>
         <!-- End page Label Plugins 
