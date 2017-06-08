@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Storage;
 use League\Flysystem\Filesystem;
 use Illuminate\Support\Facades\DB;
+use App\Register;
 use App\Trip;
 use App\TripHistory;
 
@@ -15,12 +16,19 @@ class TripController extends Controller
 
     public function booking(Request $request)
     {
-        $trip_model = new Trip();    
+        $trip_details = DB::table('trip')
+            ->join('users', 'trip.user_id', '=', 'users.user_id')            
+            ->select('trip.*', 'users.user_fname', 'users.user_lname', 'users.mobile')            
+            ->get();    
         
-        return view('booking', ['booking_list' =>  $trip_model->get()]);
+        return view('booking', ['booking_list' =>  $trip_details]);
         
     }
 
+    public function newbooking(Request $request)
+    {        
+        return view('newbooking');        
+    }
 
 	public function trip_notify(Request $request)
     {

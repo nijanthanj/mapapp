@@ -1,7 +1,7 @@
 @extends('header');            
-@extends('sidebar');            
-<div class="content-wrapper">
-    <div class="panel-body">
+@extends('sidebar');
+<div class="content-wrapper">    
+    <div class="col-md-12">
         <div class="table-responsive">
             <table  class="table table-striped">
                 <thead>

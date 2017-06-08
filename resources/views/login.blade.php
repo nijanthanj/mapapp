@@ -33,7 +33,7 @@
                         </div>
                     </div>
                     <div class="panel-body">
-                        <form id="loginForm" novalidate>
+                        <div id="loginForm" novalidate>
                             <div class="form-group">
                                 <label class="control-label" for="username">Username</label>
                                 <input type="text" placeholder="example@gmail.com" title="Please enter you username" required="" value="" name="username" id="username" class="form-control">
@@ -49,7 +49,7 @@
                                 <a class="btn btn-warning" href="#">Forgot password ?</a>
                                 <p id="err_msg" class="clear">Username or password is incorrect</p>            
                             </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -62,12 +62,23 @@ $('#login').click( function(event) {
     event.preventDefault();
 	$('#err_msg').hide();
 	var email = $.trim($('#username').val());
-	var password = $.trim($('#password').val());
-    var url = '<?php echo URL::to('/');?>'+'/welcome';
-	if(email == 'admin' && password == 'admin'){
-		location.href = url;
-	}else{
-		$('#err_msg').show();
-	}
+	var password_str = $.trim($('#password').val());
+    var successurl = '<?php echo URL::to('/');?>'+'/welcome';
+    var apiurl = '<?php echo URL::to('/');?>'+'/login';
+    var data = {user_email : email, password : password_str};
+    $.ajax({
+      url: apiurl,
+      method: "POST",
+      data: data,            
+      success: function(response){  
+            var response = JSON.parse(response);                     
+            if(response.error){
+                $('#err_msg').show();
+            }else if(response.success){                
+                location.href = successurl;
+            }
+        }
+    });
+    
 });
 </script>

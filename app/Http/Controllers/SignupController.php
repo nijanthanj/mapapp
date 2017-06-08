@@ -8,6 +8,7 @@ use Storage;
 use League\Flysystem\Filesystem;
 use App\Register;
 use App\City;
+use Mail;
 
 class SignupController extends Controller
 {
@@ -69,8 +70,12 @@ class SignupController extends Controller
             if($request->profile_photo){
                 $filename = md5($request->email).'_profile_photo'.$extension;
                 Storage::disk('local')->put($filename, base64_decode($request->profile_photo));            
-            }           
-
+            }                       
+            $data = ['fname' => $request->fname];
+            Mail::send('register', $data , function($message) use ($request){
+                $message->to($request->email)
+                ->subject('Registered successfully');
+            });
             $res = [
                 'success' => 'Registered successfully',
                 'error' => ''
@@ -120,16 +125,15 @@ class SignupController extends Controller
     }
 
     public function login(Request $request)
-    {
-        $register = new Register();
-        $where = ['user_email' => $request->email, 'password' => md5($request->password)];
-        $count = $register::where($where)->pluck('user_id');
+    {                   
+        $register = new Register();        
+        $where = ['user_email' => $request->user_email, 'password' => md5($request->password)];
+        $result = $register::where($where)->get();  
         
-        
-        if($count) {
+        if(count($result) && $result[0]->user_id) {
             $res = [
                 'success' => 'Logged in successfully',
-                'driver_id' => $count,
+                'driver_id' => $result[0]->user_id,
                 'error' => ''
             ];
         }else{
@@ -145,9 +149,16 @@ class SignupController extends Controller
     {
         $register = new Register();
         $where = ['user_email' => $request->email];
-        $count = $register::where($where)->count();
+        $result = $register::where($where)->get();
         
-        if($count) {
+        if(count($result) && $result[0]->user_email) {
+            $newpass = rand(100000,10000000);
+            $passreset = $register::where($where)->update(['password' => md5($newpass)]);
+            $data = ['password' => $newpass, 'fname' => $result[0]->fname];
+            Mail::send('mail', $data , function($message) use ($result){
+                $message->to($result[0]->user_email)
+                ->subject('Your application password');
+            });
             $res = [
                 'success' => 'Your password sent to your registered email address',
                 'error' => ''

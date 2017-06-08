@@ -27,6 +27,7 @@ Route::post('/trip_notify_driver', 'TripController@trip_notify_driver');
 
 
 Route::get('/booking', 'TripController@booking');
+Route::get('/newbooking', 'TripController@newbooking');
 Route::get('/newuser', 'SignupController@userlist');
 
 
