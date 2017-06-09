@@ -78,7 +78,6 @@ $('#login').click( function(event) {
                 location.href = successurl;
             }
         }
-    });
-    
+    });    
 });
 </script>
