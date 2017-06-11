@@ -27,8 +27,15 @@ class TripController extends Controller
     }
 
     public function newbooking(Request $request)
-    {        
-        return view('newbooking');        
+    {   
+        $vehicle_model = new Vehicles();       
+        $where_veh = ['vehicle_status' => 'available'];        
+        $driver_location = DB::table('vehicles')
+            ->join('users', 'vehicles.user_id', '=', 'users.user_id')
+            ->select('vehicles.*', 'users.user_fname', 'users.user_lname', 'users.mobile')
+            ->where($where_veh)
+            ->get();         
+        return view('newbooking', ['driver_location' =>  $driver_location]);        
     }
     public function createbooking(Request $request)
     {        
@@ -187,5 +194,36 @@ class TripController extends Controller
         }
 
         return json_encode($res);
+    }
+
+    public function sms($number, $msg)
+    {
+        $url = 'http://bhashsms.com/api/sendmsg.php';
+
+        $fields = array(
+            'user'      => "cclenq",
+            'pass'      => "123",
+            'sender'    => "cclenq",
+            'phone'     => $number,
+            'text'      => $msg,
+            'priority'  => 'ndnd',
+            'type'      => 'normal'
+        );
+
+        //open connection
+        $ch = curl_init();
+
+        //set the url, number of POST vars, POST data
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, count($fields));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($fields));
+
+        //execute post
+        $result = curl_exec($ch);
+
+        //close connection
+        curl_close($ch);
+
+        return ($result);
     }
 }

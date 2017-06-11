@@ -16,11 +16,12 @@
                 <tbody>
                     @foreach ($booking_list as $booking_list)
                         <tr>
-                            <td>{{$booking_list->trip_id}}</td>
+                            {{$booking_list}}
+                            <!-- <td>{{$booking_list->trip_id}}</td>
                             <td>{{$booking_list->driver_id}}</td>
                             <td>{{$booking_list->pickup}}</td>
                             <td>{{$booking_list->dropoff}}</td>
-                            <td>{{$booking_list->trip_status}}</td>                                            
+                            <td>{{$booking_list->trip_status}}</td>   -->                                          
                         </tr>
                     @endforeach
 

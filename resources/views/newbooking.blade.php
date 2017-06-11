@@ -1,13 +1,14 @@
-@extends('header');            
-@extends('sidebar');
-<script src="https://maps.googleapis.com/maps/api/js?key= AIzaSyBlrdksW4BHONkIuE4Cs0dMucG-uQiQHxk&libraries=places"
-        async defer></script>
+
+<link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
         <script src="assets/plugins/jQuery/jquery-1.12.4.min.js" type="text/javascript"></script>
         <!-- jquery-ui --> 
         <script src="assets/plugins/jquery-ui-1.12.1/jquery-ui.min.js" type="text/javascript"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBlrdksW4BHONkIuE4Cs0dMucG-uQiQHxk&libraries=places&callback=initMap&sensor=true"
+        async defer></script>
 <div class="content-wrapper">
-	<div class="col-md-6" name="booking">
-        <label>First Name</label>
+	<div class="col-md-6">
+        <label>First Name</label>        
+        <div id="field" data-field-id="{{$driver_location}}" ></div>
         <input type="text" class="form-control" id="fname" name="fname">
         <label>Last Name</label>
         <input type="text" class="form-control" id="lname" name="lname">
@@ -17,19 +18,22 @@
         <input type="number" class="form-control" id="passenger" name="passenger">
         <label>From Address</label>
         <input id="autocomplete1" class="form-control geo_complete" placeholder="Enter From Address"
-             onFocus="geolocate('autocomplete1')" type="text" value="" autocomplete="on"></input>
+             onFocus="geolocate('autocomplete1');" type="text" value="" autocomplete="on"></input>
         <input type="text" value="" class="hide form-control" id="autocomplete1_lat">
         <input type="text" value="" class="hide form-control" id="autocomplete1_lon">
         <label>Destiation Address</label>
         <input id="autocomplete2" class="form-control geo_complete" placeholder="Enter To Address"
-             onFocus="geolocate('autocomplete2')" type="text" value="" autocomplete="on"></input>
+             onFocus="geolocate('autocomplete2');" type="text" value="" autocomplete="on"></input>
         <input type="text" value="" class="hide form-control" id="autocomplete2_lat">
         <input type="text" value="" class="hide form-control" id="autocomplete2_lon">
         <p><br/><button onclick="book()" class="pull-right btn btn-active" id="book">Book</button></p>
         <p id="error">Please enter valid inputs<p>        
     </div>
+    <div class="col-md-6">
+        <div id="map" style="height:500px;width:600px;"></div>
+    </div>    
 </div>
-@extends('footer');
+
 <script type="text/javascript">	
     jQuery('#error').hide();
     var book_clear = 'false';
@@ -78,16 +82,17 @@
                 }
             });
         }
-    }
+    }    
 
 	function geolocate(idspecific){				
-		initialize(idspecific);
+		initialize(idspecific);        
 		google.maps.event.addDomListener(window, 'load', initialize); 					
 	}
 
 	function initialize(idspecific) {
 		var options = {		  
-          types: ['address'],
+          types: ['address'],          
+          componentRestrictions: {country: 'in'}
 		};
 		var input = document.getElementById(idspecific);
 		var autocomplete = new google.maps.places.Autocomplete(input, options);        
@@ -100,8 +105,61 @@
               var lonid = '#'+idspecific+'_lon';              
               $(latid).val(lat);
               $(lonid).val(lng);
+              initMap();
            }
         );
 	}
-</script>
+    
+    function initMap() {    
+        var directionsDisplay = new google.maps.DirectionsRenderer;
+        var directionsService = new google.maps.DirectionsService;
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 14,
+          center: {lat: 11.0210, lng: 76.9663}
+        });
+        directionsDisplay.setMap(map);
 
+        calculateAndDisplayRoute(directionsService, directionsDisplay);        
+
+        var myLatLng = $('#field').data();
+        
+        for (var i = 0; i < myLatLng.fieldId.length; i++) {
+            var myobj = {};
+            myobj.lat = myLatLng.fieldId[i].lat;
+            myobj.lng = myLatLng.fieldId[i].lat;  
+            var detail = myLatLng.fieldId[i].user_fname+' '+myLatLng.fieldId[i].user_lname+' '+myLatLng.fieldId[i].vehicle_reg_no+' '+myLatLng.fieldId[i].mobile;
+            createMarker(myobj,detail);
+        }
+        function createMarker(place,detail) {            
+          var marker = new google.maps.Marker({
+            position: place,
+            map: map,
+            title: detail
+          });
+       }
+      }
+
+      function calculateAndDisplayRoute(directionsService, directionsDisplay) {
+        var selectedMode = 'DRIVING';
+        if($('#autocomplete1_lat').val() && $('#autocomplete2_lat').val()){
+            var originpathobj = {};
+            originpathobj.lat = parseFloat($('#autocomplete1_lat').val());
+            originpathobj.lng = parseFloat($('#autocomplete1_lon').val());
+            var destpathobj = {};
+            destpathobj.lat = parseFloat($('#autocomplete2_lat').val());
+            destpathobj.lng = parseFloat($('#autocomplete2_lon').val());
+            console.log(originpathobj);
+            directionsService.route({            
+              origin: originpathobj,
+              destination: destpathobj,  
+              travelMode: google.maps.TravelMode[selectedMode]
+            }, function(response, status) {
+              if (status == 'OK') {
+                directionsDisplay.setDirections(response);
+              } else {
+                window.alert('Directions request failed due to ' + status);
+              }
+            });
+        }
+      }
+</script>

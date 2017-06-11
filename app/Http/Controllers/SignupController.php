@@ -76,6 +76,7 @@ class SignupController extends Controller
                 $message->to($request->email)
                 ->subject('Registered successfully');
             });
+            $this->sms($request->mobile,'Your account registered successfully, Check your mail for more details.');
             $res = [
                 'success' => 'Registered successfully',
                 'error' => ''
@@ -204,7 +205,7 @@ class SignupController extends Controller
         $register = new Register();
         $where = ['user_email' => $request->email];
         $result = $register::where($where)->update(['status' => $request->status]);
-
+        
         if($result) {
             $res = [
                 'success' => 'Status updated successfully',

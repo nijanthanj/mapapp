@@ -10,7 +10,7 @@
             <h1>Admin Template Dashboard</h1>
             <small>Very detailed & featured admin.</small>
             <ol class="breadcrumb">
-                <li><a href="<?php echo URL::to('/');?>/booking"><i class="pe-7s-home"></i> New Booking</a></li>
+                <li><a href="<?php echo URL::to('/');?>/newbooking"><i class="pe-7s-home"></i> New Booking</a></li>
                 
             </ol>
         </div>
