@@ -73,7 +73,7 @@ class TripController extends Controller
         $driverlist = [];
 
         foreach ($veh_list as $key => $value) {
-            $vehiclelist[$value->vehicle_id] = $this->distance($request->autocomplete1_lat, $request->autocomplete1_lon, $value->lat, $value->lon, "K");
+            $vehiclelist[$value->vehicle_id] = $this->distance($request->autocomplete1, $value->address, "K");
         }   
 
         if(count($vehiclelist)){
@@ -99,7 +99,8 @@ class TripController extends Controller
         $trip_model->pickup = json_encode(['lat' => $request->autocomplete1_lat,'lon' => $request->autocomplete1_lon,'address' => $request->autocomplete1]);         
         $trip_model->dropoff = json_encode(['lat' => $request->autocomplete2_lat,'lon' => $request->autocomplete2_lon,'address' => $request->autocomplete2]);         
         $trip_model->no_of_pas = $request->passenger; 
-        $trip_model->km = $this->distance($request->autocomplete1_lat, $request->autocomplete1_lon, $request->autocomplete2_lat, $request->autocomplete2_lon, "K");
+        $trip_model->km = $this->distance($request->autocomplete1, $request->autocomplete2, "k");
+        $trip_model->duration = $this->distance($request->autocomplete1, $request->autocomplete2, "d");
         $trip_model->trip_status = 'pending';
         
         //$where_rate = ['user_id' => $final_driver];
@@ -112,6 +113,7 @@ class TripController extends Controller
             $trip_hist_model->trip_id = $trip_model->id;            
             $trip_hist_model->his_msg = 'pending';
             $trip_hist_model->save();
+            $this->sms($request->mobile,'Booking done successfully, Driver '.$driverdetails[0]->user_fname.' call: '.$driverdetails[0]->mobile);
             $res = [
                 'success' => 'Booking done successfully',
                 'error' => ''
@@ -126,21 +128,20 @@ class TripController extends Controller
         return json_encode($res);
     }   
 
-    public function distance($lat1, $lon1, $lat2, $lon2, $unit) {
-          $theta = $lon1 - $lon2;
-          $dist = sin(deg2rad($lat1)) * sin(deg2rad($lat2)) +  cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta));
-          $dist = acos($dist);
-          $dist = rad2deg($dist);
-          $miles = $dist * 60 * 1.1515;
-          $unit = strtoupper($unit);
-
-          if ($unit == "K") {
-            return ($miles * 1.609344);
-          } else if ($unit == "N") {
-              return ($miles * 0.8684);
-            } else {
-                return $miles;
-              }
+    public function distance($origin, $destination, $mode) {
+          
+        $url = 'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&mode=driving&key=AIzaSyBlrdksW4BHONkIuE4Cs0dMucG-uQiQHxk&origins='.str_replace(' ', '', $origin).'&destinations='.str_replace(' ', '', $destination);
+        $data = file_get_contents($url);
+        $data = utf8_decode($data);
+        $obj = json_decode($data);
+        if($mode == 'k'){
+            $result = explode(' ', $obj->rows[0]->elements[0]->distance->text);
+            return $result[0];            
+        }else{
+            $result = explode(' ', $obj->rows[0]->elements[0]->duration->text);            
+            return $result[0];            
+        }        
+        
     }
 
 	public function trip_notify(Request $request)
@@ -224,6 +225,25 @@ class TripController extends Controller
         //close connection
         curl_close($ch);
 
-        return ($result);
+        return;
+    }
+
+    public function vehicle_coords(Request $request)
+    {
+        $vehicle_model = new Vehicles();
+        $where = ['user_id' => $request->driver_id];
+        $result = $vehicle_model::where($where)->update(['lat' => $request->lat,'lon' => $request->lon]);
+        if($result){
+        $res = [
+                'success' => 'coords updated successfully',
+                'error' => ''
+            ];
+        }else{
+            $res = [
+                'success' => '',
+                'error' => 'Internal server error'
+            ];
+        }
+        return json_encode($res);
     }
 }

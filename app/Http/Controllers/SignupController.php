@@ -76,7 +76,7 @@ class SignupController extends Controller
                 $message->to($request->email)
                 ->subject('Registered successfully');
             });
-            $this->sms($request->mobile,'Your account registered successfully, Check your mail for more details.');
+            //$this->sms($request->mobile,'Your account registered successfully, Check your mail for more details.');
             $res = [
                 'success' => 'Registered successfully',
                 'error' => ''

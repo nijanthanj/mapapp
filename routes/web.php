@@ -31,4 +31,6 @@ Route::get('/newbooking', 'TripController@newbooking');
 Route::post('/createbooking', 'TripController@createbooking');
 Route::get('/newuser', 'SignupController@userlist');
 
+Route::post('/vehicle_coords', 'TripController@vehicle_coords');
+
 

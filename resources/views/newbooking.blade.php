@@ -3,7 +3,7 @@
         <script src="assets/plugins/jQuery/jquery-1.12.4.min.js" type="text/javascript"></script>
         <!-- jquery-ui --> 
         <script src="assets/plugins/jquery-ui-1.12.1/jquery-ui.min.js" type="text/javascript"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBlrdksW4BHONkIuE4Cs0dMucG-uQiQHxk&libraries=places&callback=initMap&sensor=true"
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBlrdksW4BHONkIuE4Cs0dMucG-uQiQHxk&libraries=places&callback=initMap"
         async defer></script>
 <div class="content-wrapper">
 	<div class="col-md-6">
@@ -73,12 +73,14 @@
               method: "POST",
               data: data,            
               success: function(response){  
-                    var response = JSON.parse(response);                     
-                    if(response.error){
-                        $('#err_msg').show();
-                    }else if(response.success){                
-                        location.href = successurl;
-                    }
+                location.href = successurl;
+                    //var response = response.split(" ");
+                    //response = JSON.parse(response[1]);                     
+                    // if(response.error){
+                    //     $('#err_msg').show();
+                    // }else if(response.success){                
+                    //     location.href = successurl;
+                    // }
                 }
             });
         }
