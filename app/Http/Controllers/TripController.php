@@ -160,7 +160,7 @@ class TripController extends Controller
     public function trip_notify_driver(Request $request)
     {
         $trip_model = new Trip();    
-        $where_ph = ['trip.driver_id' => $request->driver_id];
+        $where_ph = ['trip.driver_id' => $request->driver_id, 'trip.trip_status' => 'pending'];
         $trip_notify = DB::table('trip')
             ->join('users', 'trip.user_id', '=', 'users.user_id')
             ->select('trip.*', 'users.user_fname', 'users.user_lname', 'users.mobile')
@@ -195,6 +195,10 @@ class TripController extends Controller
         }
 
         return json_encode($res);
+    }
+
+    public function sendsms(Request $request){
+        return $this->sms($request->number,$request->msg);
     }
 
     public function sms($number, $msg)
@@ -245,5 +249,34 @@ class TripController extends Controller
             ];
         }
         return json_encode($res);
+    }
+
+    public function weekbar(Request $request)
+    {
+        $trip_model = new Trip();            
+        $bar_rate_full = DB::select          
+            ("SELECT fare,km,date(updated_at) as updated_at FROM trip WHERE driver_id = ".$request->driver_id." AND WEEKOFYEAR(created_at) = WEEKOFYEAR(NOW())");
+        $bar_rate = array();
+
+        foreach ($bar_rate_full as $key => $value) {
+                $bar_rate[$value->updated_at] = DB::select("SELECT sum(fare) as fare,sum(km) as km FROM trip WHERE driver_id = ".$request->driver_id." AND updated_at >= '".$value->updated_at." 00:00:00' AND updated_at <= '".$value->updated_at." 23:59:59'");
+        }
+        
+        $bar_rate['sum'] = DB::select          
+            ("SELECT sum(fare) as fare,sum(km) as km FROM trip WHERE driver_id = ".$request->driver_id." AND WEEKOFYEAR(created_at) = WEEKOFYEAR(NOW())");
+                
+        return $bar_rate;
+    }
+
+    public function driver_trip_history(Request $request)
+    {
+        $trip_model = new Trip();    
+        $where_ph = ['trip.driver_id' => $request->driver_id];
+        $driver_trip_history = DB::table('trip')            
+            ->select('trip_id','updated_at','fare')
+            ->where($where_ph)
+            ->get(); 
+        
+        return $driver_trip_history;
     }
 }

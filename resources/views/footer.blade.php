@@ -1,186 +1,54 @@
-            <footer class="main-footer">
-                <div class="pull-right hidden-xs"> <b>Version</b> 1.0</div>
-                <strong>Copyright &copy; 2016-2017 <a href="#">bdtask</a>.</strong> All rights reserved. <i class="fa fa-heart color-green"></i>
-            </footer>
-        </div>
-        <!-- ./wrapper -->
-        <!-- Start Core Plugins
-        =====================================================================-->
-        <!-- jQuery -->
-        <script src="assets/plugins/jQuery/jquery-1.12.4.min.js" type="text/javascript"></script>
-        <!-- jquery-ui --> 
-        <script src="assets/plugins/jquery-ui-1.12.1/jquery-ui.min.js" type="text/javascript"></script>
-        <!-- Bootstrap -->
-        <script src="assets/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
-        <!-- lobipanel -->
-        <script src="assets/plugins/lobipanel/lobipanel.min.js" type="text/javascript"></script>
-        <!-- Pace js -->
-        <script src="assets/plugins/pace/pace.min.js" type="text/javascript"></script>
-        <!-- SlimScroll -->
-        <script src="assets/plugins/slimScroll/jquery.slimscroll.min.js" type="text/javascript"></script>
-        <!-- FastClick -->
-        <script src="assets/plugins/fastclick/fastclick.min.js" type="text/javascript"></script>
-        <!-- AdminBD frame -->
-        <script src="assets/dist/js/frame.js" type="text/javascript"></script>
-        <!-- End Core Plugins
-        =====================================================================-->
-        <!-- Start Page Lavel Plugins
-        =====================================================================-->
-        <!-- Toastr js -->
-        <script src="assets/plugins/toastr/toastr.min.js" type="text/javascript"></script>
-        <!-- Sparkline js -->
-        <script src="assets/plugins/sparkline/sparkline.min.js" type="text/javascript"></script>
-        <!-- Data maps js -->
-        <script src="assets/plugins/datamaps/d3.min.js" type="text/javascript"></script>
-        <script src="assets/plugins/datamaps/topojson.min.js" type="text/javascript"></script>
-        <script src="assets/plugins/datamaps/datamaps.all.min.js" type="text/javascript"></script>
-        <!-- Counter js -->
-        <script src="assets/plugins/counterup/waypoints.js" type="text/javascript"></script>
-        <script src="assets/plugins/counterup/jquery.counterup.min.js" type="text/javascript"></script>
-        <!-- Emojionearea -->
-        <script src="assets/plugins/emojionearea/emojionearea.min.js" type="text/javascript"></script>
-        <!-- Monthly js -->
-        <script src="assets/plugins/monthly/monthly.js" type="text/javascript"></script>
-        <!-- End Page Lavel Plugins
-        =====================================================================-->
-        <!-- Start Theme label Script
-        =====================================================================-->
-        <!-- Dashboard js -->
-        <script src="assets/dist/js/dashboard.js" type="text/javascript"></script>
-        <!-- End Theme label Script
-        =====================================================================-->
-        <script>
-            $(document).ready(function () {
+        <!-- footer content -->
+        <footer>
+          <div class="pull-right">
+            Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
+          </div>
+          <div class="clearfix"></div>
+        </footer>
+        <!-- /footer content -->
+      </div>
+    </div>
 
-                "use strict"; // Start of use strict
+    <!-- jQuery -->
+    <script src="../jsvendors/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="../jsvendors/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- FastClick -->
+    <script src="../jsvendors/fastclick/lib/fastclick.js"></script>
+    <!-- NProgress -->
+    <script src="../jsvendors/nprogress/nprogress.js"></script>
+    <!-- Chart.js -->
+    <script src="../jsvendors/Chart.js/dist/Chart.min.js"></script>
+    <!-- gauge.js -->
+    <script src="../jsvendors/gauge.js/dist/gauge.min.js"></script>
+    <!-- bootstrap-progressbar -->
+    <script src="../jsvendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
+    <!-- iCheck -->
+    <script src="../jsvendors/iCheck/icheck.min.js"></script>
+    <!-- Skycons -->
+    <script src="../jsvendors/skycons/skycons.js"></script>
+    <!-- Flot -->
+    <script src="../jsvendors/Flot/jquery.flot.js"></script>
+    <script src="../jsvendors/Flot/jquery.flot.pie.js"></script>
+    <script src="../jsvendors/Flot/jquery.flot.time.js"></script>
+    <script src="../jsvendors/Flot/jquery.flot.stack.js"></script>
+    <script src="../jsvendors/Flot/jquery.flot.resize.js"></script>
+    <!-- Flot plugins -->
+    <script src="../jsvendors/flot.orderbars/js/jquery.flot.orderBars.js"></script>
+    <script src="../jsvendors/flot-spline/js/jquery.flot.spline.min.js"></script>
+    <script src="../jsvendors/flot.curvedlines/curvedLines.js"></script>
+    <!-- DateJS -->
+    <script src="../jsvendors/DateJS/build/date.js"></script>
+    <!-- JQVMap -->
+    <script src="../jsvendors/jqvmap/dist/jquery.vmap.js"></script>
+    <script src="../jsvendors/jqvmap/dist/maps/jquery.vmap.world.js"></script>
+    <script src="../jsvendors/jqvmap/examples/js/jquery.vmap.sampledata.js"></script>
+    <!-- bootstrap-daterangepicker -->
+    <script src="../jsvendors/moment/min/moment.min.js"></script>
+    <script src="../jsvendors/bootstrap-daterangepicker/daterangepicker.js"></script>
 
-                // notification
-                //counter
-                $('.count-number').counterUp({
-                    delay: 10,
-                    time: 5000
-                });
-
-                //data maps
-                var basic_choropleth = new Datamap({
-                    element: document.getElementById("map1"),
-                    projection: 'mercator',
-                    fills: {
-                        defaultFill: "#37a000",
-                        authorHasTraveledTo: "#fa0fa0"
-                    },
-                    data: {
-                        USA: {fillKey: "authorHasTraveledTo"},
-                        JPN: {fillKey: "authorHasTraveledTo"},
-                        ITA: {fillKey: "authorHasTraveledTo"},
-                        CRI: {fillKey: "authorHasTraveledTo"},
-                        KOR: {fillKey: "authorHasTraveledTo"},
-                        DEU: {fillKey: "authorHasTraveledTo"}
-                    }
-                });
-
-                var colors = d3.scale.category10();
-
-                window.setInterval(function () {
-                    basic_choropleth.updateChoropleth({
-                        USA: colors(Math.random() * 10),
-                        RUS: colors(Math.random() * 100),
-                        AUS: {fillKey: 'authorHasTraveledTo'},
-                        BRA: colors(Math.random() * 50),
-                        CAN: colors(Math.random() * 50),
-                        ZAF: colors(Math.random() * 50),
-                        IND: colors(Math.random() * 50)
-                    });
-                }, 2000);
-
-                //Chat list
-                $('.chat_list').slimScroll({
-                    size: '3px',
-                    height: '305px'
-                });
-
-                // Message
-                $('.message_inner').slimScroll({
-                    size: '3px',
-                    height: '320px'
-//                    position: 'left'
-                });
-
-                //emojionearea
-                $(".emojionearea").emojioneArea({
-                    pickerPosition: "top",
-                    tonesStyle: "radio"
-                });
-
-                //monthly calender
-                $('#m_calendar').monthly({
-                    mode: 'event',
-                    //jsonUrl: 'events.json',
-                    //dataType: 'json'
-                    xmlUrl: 'events.xml'
-                });
-
-                //Sparklines Charts
-                $('.sparkline1').sparkline([4, 6, 7, 7, 4, 3, 2, 4, 6, 7, 4, 6, 7, 7, 4, 3, 2, 4, 6, 7, 7, 4, 3, 1, 5, 7, 6, 6, 5, 5, 4, 4, 3, 3, 4, 4, 5], {
-                    type: 'bar',
-                    barColor: '#37a000',
-                    height: '35',
-                    barWidth: '3',
-                    barSpacing: 2
-                });
-
-                $(".sparkline2").sparkline([-8, 2, 4, 3, 5, 4, 3, 5, 5, 6, 3, 9, 7, 3, 5, 6, 9, 5, 6, 7, 2, 3, 9, 6, 6, 7, 8, 10, 15, 16, 17, 15], {
-                    type: 'line',
-                    height: '35',
-                    width: '100%',
-                    lineColor: '#37a000',
-                    fillColor: '#fff'
-                });
-
-                $(".sparkline3").sparkline([2, 5, 3, 7, 5, 10, 3, 6, 5, 7], {
-                    type: 'line',
-                    height: '35',
-                    width: '100%',
-                    lineColor: '#37a000',
-                    fillColor: '#fff'
-                });
-
-                $(".sparkline4").sparkline([10, 34, 13, 33, 35, 24, 32, 24, 52, 35], {
-                    type: 'line',
-                    height: '35',
-                    width: '100%',
-                    lineColor: '#37a000',
-                    fillColor: 'rgba(55, 160, 0, 0.7)'
-                });
-
-                $(".sparkline5").sparkline([4, 2], {
-                    type: 'pie',
-                    sliceColors: ['#37a000', '#2c3136']
-                });
-
-                $(".sparkline6").sparkline([3, 2], {
-                    type: 'pie',
-                    sliceColors: ['#37a000', '#2c3136']
-                });
-
-                $(".sparkline7").sparkline([4, 1], {
-                    type: 'pie',
-                    sliceColors: ['#37a000', '#2c3136']
-                });
-
-                $(".sparkline8").sparkline([1, 3], {
-                    type: 'pie',
-                    sliceColors: ['#37a000', '#2c3136']
-                });
-
-                $(".sparkline9").sparkline([3, 5], {
-                    type: 'pie',
-                    sliceColors: ['#37a000', '#2c3136']
-                });
-
-            });
-        </script>
-    </body>
-
-<!-- Mirrored from admin.bdtask.com/BdtaskAdmin_v1.0/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 28 Mar 2017 16:11:40 GMT -->
+    <!-- Custom Theme Scripts -->
+    <script src="../build/js/custom.js"></script>
+    
+  </body>
 </html>

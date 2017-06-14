@@ -1,5 +1,4 @@
-@extends('header');            
-@extends('sidebar');
+@extends('header');   
 <div class="content-wrapper">    
     <div class="col-md-12">
         <div class="table-responsive">

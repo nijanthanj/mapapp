@@ -223,11 +223,22 @@ class SignupController extends Controller
 
     public function userlist(Request $request)
     {
-        $register = new Register();
-        $where = ['user_type' => 'manager'];
+        $register = new Register();        
         $result = $register::where($where)->get();
+        return view('user_list', ['user_list' =>  $result]);        
+    }
 
-        return view('user_list', ['user_list' =>  $result]);
-        
+    public function user_account_details(Request $request)
+    {
+        $register = new Register();        
+        $where = ['user_id' => $request->user_id];
+        $result = $register::where($where)->get();        
+        $custom_url =  str_replace('public','storage',url('/'));
+        $result[0]->reg_cert = $custom_url.'/app/'.$result[0]->reg_cert;
+        $result[0]->insurance = $custom_url.'/app/'.$result[0]->insurance;
+        $result[0]->permit = $custom_url.'/app/'.$result[0]->permit;
+        $result[0]->license = $custom_url.'/app/'.$result[0]->license;
+        $result[0]->profile_photo = $custom_url.'/app/'.$result[0]->profile_photo;
+        return $result;
     }
 }
