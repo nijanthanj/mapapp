@@ -71,11 +71,11 @@ class SignupController extends Controller
                 $filename = md5($request->email).'_profile_photo'.$extension;
                 Storage::disk('local')->put($filename, base64_decode($request->profile_photo));            
             }                       
-            $data = ['fname' => $request->fname];
-            Mail::send('register', $data , function($message) use ($request){
-                $message->to($request->email)
-                ->subject('Registered successfully');
-            });
+            // $data = ['fname' => $request->fname];
+            // Mail::send('register', $data , function($message) use ($request){
+            //     $message->to($request->email)
+            //     ->subject('Registered successfully');
+            // });
             //$this->sms($request->mobile,'Your account registered successfully, Check your mail for more details.');
             $res = [
                 'success' => 'Registered successfully',
@@ -155,11 +155,11 @@ class SignupController extends Controller
         if(count($result) && $result[0]->user_email) {
             $newpass = rand(100000,10000000);
             $passreset = $register::where($where)->update(['password' => md5($newpass)]);
-            $data = ['password' => $newpass, 'fname' => $result[0]->fname];
-            Mail::send('mail', $data , function($message) use ($result){
-                $message->to($result[0]->user_email)
-                ->subject('Your application password');
-            });
+            // $data = ['password' => $newpass, 'fname' => $result[0]->fname];
+            // Mail::send('mail', $data , function($message) use ($result){
+            //     $message->to($result[0]->user_email)
+            //     ->subject('Your application password');
+            // });
             $res = [
                 'success' => 'Your password sent to your registered email address',
                 'error' => ''
