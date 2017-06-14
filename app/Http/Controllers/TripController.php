@@ -21,8 +21,8 @@ class TripController extends Controller
         $trip_details = DB::table('trip')
             ->join('users', 'trip.user_id', '=', 'users.user_id')            
             ->select('trip.*', 'users.user_fname', 'users.user_lname', 'users.mobile')            
-            ->get();    
-        
+            ->get();   
+      
         return view('booking', ['booking_list' =>  $trip_details]);        
     }
 
