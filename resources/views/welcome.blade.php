@@ -81,26 +81,27 @@
         <!-- page content -->
         <div class="right_col" role="main">
           <!-- top tiles -->
+          <div id="field" data-field-id="{{$driver_location}}" ></div>
           <div class="row tile_count">
             <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
               <span class="count_top"><i class="fa fa-user"></i> Total Users</span>
-              <div class="count">2500</div>              
+              <div class="count">{{$contact_count}}</div>              
             </div>
             <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
               <span class="count_top"><i class="fa fa-user"></i> Online Drivers</span>
-              <div class="count">123.50</div>              
+              <div class="count">{{$online_driver}}</div>              
             </div>
             <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
               <span class="count_top"><i class="fa fa-user"></i> Total Drivers</span>
-              <div class="count">2,500</div>              
+              <div class="count">{{$online_driver}}</div>              
             </div>
             <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
               <span class="count_top"><i class="fa fa-user"></i> Online Trips</span>
-              <div class="count">4,567</div>              
+              <div class="count">{{$tot_driver}}</div>              
             </div>
             <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
               <span class="count_top"><i class="fa fa-money"></i> Total Collections</span>
-              <div class="count">2,315</div>              
+              <div class="count">&#8377;{{$tot_rate}}</div>              
             </div>            
           </div>
           <!-- /top tiles -->
@@ -116,7 +117,7 @@
                 </div>
 
                 <div class="col-md-9 col-sm-9 col-xs-12">
-                  <div id="chart_plot_01" class="demo-placeholder"></div>
+                   <div id="map" style="height:500px;width:100%;"></div>
                 </div>
                 <div class="col-md-3 col-sm-3 col-xs-12 bg-white">
                   <div class="x_panel">
@@ -125,18 +126,18 @@
                   <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
-                  <div class="dashboard-widget-content">
+                  <div class="dashboard-widget-content">                    
                     <ul class="list-unstyled timeline widget">
                       <li>
                         <div class="block">
                           <div class="block_content">
                             <h2 class="title">
-                                              <a>Who Needs Sundance When You’ve Got&nbsp;Crowdfunding?</a>
+                                              <a>New trip booked</a>
                                           </h2>
                             <div class="byline">
-                              <span>13 hours ago</span> by <a>Jane Smith</a>
+                              <span>1 hours ago</span> by <a>Jane Smith</a>
                             </div>
-                            <p class="excerpt">Film festivals used to be do-or-die moments for movie makers. They were where you met the producers that could fund your project, and if the buyers liked your flick, they’d pay to Fast-forward and… <a>Read&nbsp;More</a>
+                            <p class="excerpt">From Coimbatore to Mettupalayam</a>
                             </p>
                           </div>
                         </div>
@@ -157,3 +158,31 @@
         </div>
         <!-- /page content -->
 @extends('footer');
+<script src="assets/plugins/jQuery/jquery-1.12.4.min.js" type="text/javascript"></script>        
+<script src="assets/plugins/jquery-ui-1.12.1/jquery-ui.min.js" type="text/javascript"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBlrdksW4BHONkIuE4Cs0dMucG-uQiQHxk&libraries=places&callback=initMap"
+        async defer></script>
+<script type="text/javascript">
+        var myLatLng = $('#field').data();   
+           
+          function initMap() {
+            var map = new google.maps.Map(document.getElementById('map'), {
+              zoom: 10,
+              center: {lat: 11.0210, lng: 76.9663}
+            });     
+            for (var i = 0; i < myLatLng.fieldId.length; i++) {
+                var myobj = {};
+                myobj.lat = myLatLng.fieldId[i].lat;
+                myobj.lng = myLatLng.fieldId[i].lat;  
+                var detail = myLatLng.fieldId[i].user_fname+' '+myLatLng.fieldId[i].user_lname+' '+myLatLng.fieldId[i].vehicle_reg_no+' '+myLatLng.fieldId[i].mobile;
+                createMarker(myobj,detail);
+            }
+            function createMarker(place,detail) {
+              var marker = new google.maps.Marker({
+                position: place,
+                map: map,
+                title: detail
+              });
+           }
+        }
+</script>

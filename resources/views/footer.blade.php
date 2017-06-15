@@ -10,11 +10,11 @@
     </div>
 
     <!-- jQuery -->
-    <script src="../jsvendors/jquery/dist/jquery.min.js"></script>
+    <script src="<?php echo url('/'); ?>/jsvendors/jquery/dist/jquery.min.js"></script>
     <!-- Bootstrap -->
-    <script src="../jsvendors/bootstrap/dist/js/bootstrap.min.js"></script>    
+    <script src="<?php echo url('/'); ?>/jsvendors/bootstrap/dist/js/bootstrap.min.js"></script>    
     <!-- Custom Theme Scripts -->
-    <script src="../build/js/custom.js"></script>
+    <script src="<?php echo url('/'); ?>/build/js/custom.js"></script>
     
   </body>
 </html>

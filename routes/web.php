@@ -15,7 +15,7 @@ Route::get('/', 'DashboardController@login');
 Route::get('/welcome', 'DashboardController@welcome');
 Route::get('/booking', 'TripController@booking');
 Route::get('/newbooking', 'TripController@newbooking');
-Route::get('/newuser', 'SignupController@userlist');
+Route::get('/users', 'SignupController@userlist');
 
 Route::post('/signup/validate', 'SignupController@checkemail');
 Route::post('/signup/register', 'SignupController@signup');

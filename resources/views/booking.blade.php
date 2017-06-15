@@ -83,7 +83,7 @@
                   <div class="dashboard_graph">
                     <div class="row x_title">
                       <div class="col-md-6">
-                        <h3>Booking InfoSS</h3>
+                        <h3>Booking Info</h3>
                       </div>                  
                     </div>
                     <div class="col-md-12 col-sm-12 col-xs-12">
@@ -99,6 +99,7 @@
                         <th>Drop-off</th> -->
                         <th>No. of pas</th>
                         <th>KM</th>
+                        <th>FARE</th>
                         <th>Trip status</th>                                        
                     </tr>
                 </thead>
@@ -113,6 +114,7 @@
                             <td>{{$booking_list->dropoff}}</td> -->
                             <td>{{$booking_list->no_of_pas}}</td>
                             <td>{{$booking_list->km}}</td>                                                        
+                            <td>&#8377;{{$booking_list->fare}}</td>     
                             <td>
                                 @if ($booking_list->trip_status == 'pending')
                                     <span class="upper badge bg-darkbluebg">{{$booking_list->trip_status}}</span>

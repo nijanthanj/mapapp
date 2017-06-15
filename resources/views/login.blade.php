@@ -35,9 +35,9 @@
                     <div class="panel-body">
                         <div id="loginForm" novalidate>
                             <div class="form-group">
-                                <label class="control-label" for="username">Username</label>
+                                <label class="control-label" for="username">Email</label>
                                 <input type="text" placeholder="example@gmail.com" title="Please enter you username" required="" value="" name="username" id="username" class="form-control">
-                                <span class="help-block small">Your unique username to app</span>
+                                <span class="help-block small">Your unique email to app</span>
                             </div>
                             <div class="form-group">
                                 <label class="control-label" for="password">Password</label>
@@ -46,7 +46,7 @@
                             </div>
                             <div>
                                 <button id="login" class="btn">Login</button>
-                                <a class="btn btn-warning" href="#">Forgot password ?</a>
+                                <!-- <a class="btn btn-warning" href="#">Forgot password ?</a> -->
                                 <p id="err_msg" class="clear">Username or password is incorrect</p>            
                             </div>
                         </div>

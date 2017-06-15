@@ -10,11 +10,11 @@
     <title>UNGAL AUTO</title>
 
     <!-- Bootstrap -->
-    <link href="../jsvendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="<?php echo url('/'); ?>/jsvendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
-    <link href="../jsvendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="<?php echo url('/'); ?>/jsvendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
    
     <!-- Custom Theme Style -->
-    <link href="../build/css/custom.css" rel="stylesheet">
+    <link href="<?php echo url('/'); ?>/build/css/custom.css" rel="stylesheet">
   </head>
 

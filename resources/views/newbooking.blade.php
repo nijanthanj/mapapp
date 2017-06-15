@@ -1,13 +1,86 @@
+@extends('header')           
 
-<link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
-        <script src="assets/plugins/jQuery/jquery-1.12.4.min.js" type="text/javascript"></script>
-        <!-- jquery-ui --> 
-        <script src="assets/plugins/jquery-ui-1.12.1/jquery-ui.min.js" type="text/javascript"></script>
-        
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBlrdksW4BHONkIuE4Cs0dMucG-uQiQHxk&libraries=places&callback=initMap"
-        async defer></script>
-<div class="content-wrapper">
-	<div class="col-md-6">
+  <body class="nav-md">
+    <div class="container body">
+      <div class="main_container">
+        <div class="col-md-3 left_col">
+          <div class="left_col scroll-view">
+            <div class="navbar nav_title" style="border: 0;">
+              <a href="<?php echo url('/').'/welcome'; ?>" class="site_title"><i class="fa fa-taxi"></i> <span>UNGAL AUTO</span></a>
+            </div>
+
+            <div class="clearfix"></div>
+
+            <!-- menu profile quick info -->
+            <div class="profile clearfix">
+              <div class="profile_pic">
+                <img src="<?php echo url('/').'/images/Dummy.jpg'; ?>" alt="..." class="img-circle profile_img">
+              </div>
+              <div class="profile_info">
+                <span>Welcome,</span>
+                <h2>Super Admin</h2>
+              </div>
+            </div>
+            <!-- /menu profile quick info -->
+
+            <br />
+
+            <!-- sidebar menu -->
+            <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+              <div class="menu_section">                
+                <ul class="nav side-menu">
+                  <li><a href="<?php echo url('/').'/welcome'; ?>"><i class="fa fa-home"></i> Home</span></a>                   
+                  </li>
+                  <li><a href="<?php echo url('/').'/newbooking'; ?>"><i class="fa fa-edit"></i> New Booking</a>                    
+                  </li>
+                  <li><a href="#"><i class="fa fa-edit"></i> Add manager</a>                    
+                  </li>
+                  <li><a href="<?php echo url('/').'/booking'; ?>"><i class="fa fa-taxi"></i> Bookings</span></a>                   
+                  </li>
+                  <li><a href="<?php echo url('/').'/users'; ?>"><i class="fa fa-user"></i>Users</a>                    
+                  </li>
+                  <li><a><i class="fa fa-file"></i>Reports</a>                    
+                  </li>     
+                </ul>
+              </div>      
+            </div>           
+          </div>
+        </div>
+
+        <!-- top navigation -->
+        <div class="top_nav">
+          <div class="nav_menu">
+            <nav>
+              <div class="nav toggle">
+                <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+              </div>
+
+              <ul class="nav navbar-nav navbar-right">
+                <li class="">
+                  <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                    <img src="<?php echo url('/').'/images/Dummy.jpg'; ?>" alt="">Super Admin
+                    <span class=" fa fa-angle-down"></span>
+                  </a>
+                  <ul class="dropdown-menu dropdown-usermenu pull-right">
+                    <li><a href="javascript:;"> Profile</a></li>
+                    <li>
+                      <a href="javascript:;">
+                        <span class="upper badge bg-red pull-right">50%</span>
+                        <span>Settings</span>
+                      </a>
+                    </li>
+                    <li><a href="javascript:;">Help</a></li>
+                    <li><a href="<?php echo url('/'); ?>"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
+                  </ul>
+                </li>                
+              </ul>
+            </nav>
+          </div>
+        </div>      
+        <div class="right_col" role="main"> 
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+  <div class="col-md-5">
         <label>First Name</label>        
         <div id="field" data-field-id="{{$driver_location}}" ></div>
         <input type="text" class="form-control" id="fname" name="fname">
@@ -30,12 +103,16 @@
         <p><br/><button onclick="book()" class="pull-right btn btn-active" id="book">Book</button></p>
         <p id="error">Please enter valid inputs<p>        
     </div>
-    <div class="col-md-6">
-        <div id="map" style="height:500px;width:600px;"></div>
+    <div class="col-md-7">
+        <div id="map" style="height:500px;width:100%;"></div>
     </div>    
 </div>
-
-<script type="text/javascript">	
+@extends('footer');
+<script src="assets/plugins/jQuery/jquery-1.12.4.min.js" type="text/javascript"></script>        
+<script src="assets/plugins/jquery-ui-1.12.1/jquery-ui.min.js" type="text/javascript"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBlrdksW4BHONkIuE4Cs0dMucG-uQiQHxk&libraries=places&callback=initMap"
+        async defer></script>
+<script type="text/javascript"> 
     jQuery('#error').hide();
     var book_clear = 'false';
     function book(){
@@ -87,18 +164,18 @@
         }
     }    
 
-	function geolocate(idspecific){				
-		initialize(idspecific);        
-		google.maps.event.addDomListener(window, 'load', initialize); 					
-	}
+  function geolocate(idspecific){       
+    initialize(idspecific);        
+    google.maps.event.addDomListener(window, 'load', initialize);           
+  }
 
-	function initialize(idspecific) {
-		var options = {		  
+  function initialize(idspecific) {
+    var options = {     
           types: ['address'],          
           componentRestrictions: {country: 'in'}
-		};
-		var input = document.getElementById(idspecific);
-		var autocomplete = new google.maps.places.Autocomplete(input, options);        
+    };
+    var input = document.getElementById(idspecific);
+    var autocomplete = new google.maps.places.Autocomplete(input, options);        
         google.maps.event.addListener(autocomplete, 'place_changed',
            function() {            
               var place = autocomplete.getPlace();
@@ -111,7 +188,7 @@
               initMap();
            }
         );
-	}
+  }
     
     function initMap() {    
         var directionsDisplay = new google.maps.DirectionsRenderer;
