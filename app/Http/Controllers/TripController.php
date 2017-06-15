@@ -112,6 +112,8 @@ class TripController extends Controller
         }        
 
         if($trip_model->save()){
+            $where_up = ['user_id' => $final_driver];
+            $vehicle_model::where($where_up)->update(['status' => 'ontrip']);        
             $trip_hist_model->his_type = 'trip_status';
             $trip_hist_model->trip_id = $trip_model->id;            
             $trip_hist_model->his_msg = 'pending';
@@ -176,12 +178,17 @@ class TripController extends Controller
     public function trip_status(Request $request)
     {
         $trip_model = new Trip();    
-        $trip_hist_model = new TripHistory();    
+        $trip_hist_model = new TripHistory();  
+        $vehicle_model = new Vehicles();  
         
         $where = ['driver_id' => $request->driver_id,'trip_id' =>  $request->trip_id];
         $result = $trip_model::where($where)->update(['trip_status' => $request->trip_status]);
 
         if($result) {
+            if($request->trip_status == 'dest_reached'){
+                $where_up = ['user_id' => $request->driver_id];
+                $vehicle_model::where($where_up)->update(['status' => 'available']);  
+            }      
             $trip_hist_model->his_type = 'trip_status';
             $trip_hist_model->user_id = $request->driver_id;
             $trip_hist_model->his_msg = $request->trip_status;

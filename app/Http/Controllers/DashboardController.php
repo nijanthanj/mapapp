@@ -29,13 +29,18 @@ class DashboardController extends Controller
             ->where($where_veh)
             ->get();                        
     	
-        $where = ['trip_status' => 'trip_started'];
+        
 
         $tot_rate = DB::select("SELECT sum(fare) as fare FROM trip");
-        
-        $where_online = ['user_type' => 'driver', 'online_status' => 'online'];        
-        $where_driver = ['user_type' => 'driver'];        
-    	return view('welcome', ['driver_location' =>  $driver_location,'trip_hist' => $trip_hist_model->get(), 'online_trip' => $trip_model::where($where)->count(), 'online_driver' => $register::where($where_online)->count(), 'tot_driver' => $register::where($where_driver)->count(), 'tot_rate' => $tot_rate[0]->fare,'contact_count' => count($register->get())]);
+
+    	return view('welcome', ['driver_location' =>  $driver_location,
+                                'trip_hist' => $trip_hist_model->get(), 
+                                'online_trip' => $trip_model::where(['trip_status' => 'trip_started'])->count(), 
+                                'online_driver' => $register::where(['user_type' => 'driver', 'online_status' => 'online'])->count(), 
+                                'tot_driver' => $register::where(['user_type' => 'driver'])->count(), 
+                                'tot_rate' => $tot_rate[0]->fare,
+                                'contact_count' => count($register->get())
+                            ]);
     }
 
 	public function login(Request $request)

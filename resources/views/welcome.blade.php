@@ -93,11 +93,11 @@
             </div>
             <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
               <span class="count_top"><i class="fa fa-user"></i> Total Drivers</span>
-              <div class="count">{{$online_driver}}</div>              
+              <div class="count">{{$tot_driver}}</div>              
             </div>
             <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
               <span class="count_top"><i class="fa fa-user"></i> Online Trips</span>
-              <div class="count">{{$tot_driver}}</div>              
+              <div class="count">{{$online_trip}}</div>              
             </div>
             <div class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
               <span class="count_top"><i class="fa fa-money"></i> Total Collections</span>

@@ -206,8 +206,8 @@ class SignupController extends Controller
         $stat = $register::where($where)->update(['status' => $request->status]);        
         
         if($request->status == 'approved'){
-        $result = $register::where($where)->get();
-        
+            $result = $register::where($where)->get();
+        }
         if(count($result) && $result[0]->user_email) {
             $newpass = rand(100000,10000000);
             $passreset = $register::where($where)->update(['password' => md5($newpass)]);
