@@ -116,6 +116,7 @@
     jQuery('#error').hide();
     var book_clear = 'false';
     function book(){
+        $('#book').attr('disabled','disabled');
         $('#error').hide();
         var book_clear = 'false';
         var fname = $.trim($('#fname').val());
@@ -132,7 +133,9 @@
         if(!fname || !lname || !mobile || !passenger || !autocomplete1 || !autocomplete1_lat || !autocomplete1_lon || !autocomplete2 || !autocomplete2_lat || !autocomplete2_lon){
             $('#error').show();
             book_clear = 'false';
-        }else{            
+            $('#book').removeAttr('disabled');
+        }else{        
+            $('#book').attr('disabled','disabled');    
             var successurl = '<?php echo URL::to('/');?>'+'/booking';
             var apiurl = '<?php echo URL::to('/');?>'+'/createbooking';
             var data = {fname : fname,
@@ -153,7 +156,10 @@
               success: function(response){  
                     if(response.error){
                         alert(response.error);
-                    }else if(response.success){                
+                        $('#book').removeAttr('disabled');
+                    }else if(response.success){    
+                        alert(response.success);      
+                        $('#book').removeAttr('disabled');      
                         location.href = successurl;
                     }
                 }
@@ -167,8 +173,13 @@
   }
 
   function initialize(idspecific) {
+    var cityBounds = new google.maps.LatLngBounds(
+  new google.maps.LatLng(25.341233, 68.289986),
+  new google.maps.LatLng(25.450715, 68.428345));
+
     var options = {     
-          types: ['address'],          
+          bounds: cityBounds,
+          types: ['geocode'],          
           componentRestrictions: {country: 'in'}
     };
     var input = document.getElementById(idspecific);
