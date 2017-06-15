@@ -139,6 +139,7 @@ class SignupController extends Controller
         }else{
             $res = [
                 'success' => '',
+                'driver_id' => 0,
                 'error' => 'Username or password is incorrect'
             ];
         }
