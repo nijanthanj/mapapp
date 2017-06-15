@@ -20,7 +20,8 @@ class TripController extends Controller
     {
         $trip_details = DB::table('trip')
             ->join('users', 'trip.user_id', '=', 'users.user_id')            
-            ->select('trip.*', 'users.user_fname', 'users.user_lname', 'users.mobile')            
+            ->select('trip.*', 'users.user_fname', 'users.user_lname', 'users.mobile')  
+            ->orderby('trip.trip_id', 'desc')          
             ->get();   
       
         return view('booking', ['booking_list' =>  $trip_details]);        
@@ -76,7 +77,7 @@ class TripController extends Controller
             $vehiclelist[$value->vehicle_id] = $this->distance($request->autocomplete1, $value->address, "K");
         }   
 
-        if(count($vehiclelist)){
+        if(count($veh_list)){
             asort($vehiclelist);            
             $getvehicle = array_keys($vehiclelist);
             foreach ($veh_list as $key => $value) {
@@ -87,6 +88,12 @@ class TripController extends Controller
 
             $where_driver = ['user_id' => $final_driver];
             $driverdetails = $register::where($where_driver)->get();
+        }else{
+            $res = [
+                'success' => '',
+                'error' => 'No vehicles available now'
+            ];
+            return json_encode($res);
         }
         
         if($driverdetails[0]->user_id){
@@ -113,7 +120,7 @@ class TripController extends Controller
 
         if($trip_model->save()){
             $where_up = ['user_id' => $final_driver];
-            $vehicle_model::where($where_up)->update(['status' => 'ontrip']);        
+            $vehicle_model::where($where_up)->update(['vehicle_status' => 'ontrip']);        
             $trip_hist_model->his_type = 'trip_status';
             $trip_hist_model->trip_id = $trip_model->id;            
             $trip_hist_model->his_msg = 'pending';
@@ -187,7 +194,7 @@ class TripController extends Controller
         if($result) {
             if($request->trip_status == 'dest_reached'){
                 $where_up = ['user_id' => $request->driver_id];
-                $vehicle_model::where($where_up)->update(['status' => 'available']);  
+                $vehicle_model::where($where_up)->update(['vehicle_status' => 'available']);  
             }      
             $trip_hist_model->his_type = 'trip_status';
             $trip_hist_model->user_id = $request->driver_id;

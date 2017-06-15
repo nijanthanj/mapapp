@@ -151,14 +151,11 @@
               method: "POST",
               data: data,            
               success: function(response){  
-                location.href = successurl;
-                    //var response = response.split(" ");
-                    //response = JSON.parse(response[1]);                     
-                    // if(response.error){
-                    //     $('#err_msg').show();
-                    // }else if(response.success){                
-                    //     location.href = successurl;
-                    // }
+                    if(response.error){
+                        alert(response.error);
+                    }else if(response.success){                
+                        location.href = successurl;
+                    }
                 }
             });
         }

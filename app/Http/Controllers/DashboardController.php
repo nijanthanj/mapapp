@@ -31,7 +31,7 @@ class DashboardController extends Controller
     	
         
 
-        $tot_rate = DB::select("SELECT sum(fare) as fare FROM trip");
+        $tot_rate = DB::select("SELECT sum(fare) as fare FROM trip where trip_status = 'dest_reached' ");
 
     	return view('welcome', ['driver_location' =>  $driver_location,
                                 'trip_hist' => $trip_hist_model->get(), 
