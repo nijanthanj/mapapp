@@ -165,9 +165,11 @@ class TripController extends Controller
             ->select('trip.*', 'users.user_fname', 'users.user_lname', 'users.mobile')
             ->where($where_ph)
             ->get(); 
-
+            
+        $trip_notify[0]->pickup = json_decode($trip_notify[0]->pickup);
+        $trip_notify[0]->dropoff = json_decode($trip_notify[0]->dropoff);            
     	$res = ['data' => $trip_notify];
-        return json_encode($res);
+        return $res;
     }
 
     public function trip_notify_driver(Request $request)
@@ -179,9 +181,10 @@ class TripController extends Controller
             ->select('trip.*', 'users.user_fname', 'users.user_lname', 'users.mobile')
             ->where($where_ph)
             ->get(); 
-            
+        $trip_notify[0]->pickup = json_decode($trip_notify[0]->pickup);
+        $trip_notify[0]->dropoff = json_decode($trip_notify[0]->dropoff);            
         $res = ['data' => $trip_notify];
-        return json_encode($res);
+        return $res;
     }
 
     public function trip_status(Request $request)
@@ -189,15 +192,43 @@ class TripController extends Controller
         $trip_model = new Trip();    
         $trip_hist_model = new TripHistory();  
         $vehicle_model = new Vehicles();  
+        $register = new Register();
         
         $where = ['driver_id' => $request->driver_id,'trip_id' =>  $request->trip_id];
         $result = $trip_model::where($where)->update(['trip_status' => $request->trip_status]);
+        $pickup_details = $trip_model::where(['trip_id' =>  $request->trip_id])->pluck('pickup');
 
-        if($result) {
-            if($request->trip_status == 'dest_reached'){
+        if($result) {            
+            if($request->trip_status == 'rejected_driver'){
+                    $where_veh = ['vehicle_status' => 'available'];
+                    $veh_list = $vehicle_model::where($where_veh)->get();  
+                    $driverlist = [];
+                    $vehiclelist = [];
+
+                    foreach ($veh_list as $key => $value) {
+                        $vehiclelist[$value->vehicle_id] = $this->distance(json_decode($pickup_details[0])->address, $value->address, "K");
+                    }   
+
+                    if(count($veh_list)){
+                        asort($vehiclelist);            
+                        $getvehicle = array_keys($vehiclelist);
+                        foreach ($veh_list as $key => $value) {
+                           if($getvehicle[0] == $value->vehicle_id){
+                             $final_driver = $value->user_id;
+                           }
+                        }
+
+                        $where_driver = ['user_id' => $final_driver];
+                        $driverdetails = $register::where($where_driver)->get();
+                        $wheretrip = ['trip_id' =>  $request->trip_id];
+                        $trip_model::where($wheretrip)->update(['vehicle_id' => $getvehicle[0] ,'driver_id' => $driverdetails[0]->user_id,'trip_status' => 'pending','driver_name' => $driverdetails[0]->user_fname.' '.$driverdetails[0]->user_lname,'driver_mobile' => $driverdetails[0]->mobile]);                        
+                        $vehicle_model::where($where_driver)->update(['vehicle_status' => 'ontrip']);  
+                    }
+            }      
+            if($request->trip_status == 'dest_reached' || $request->trip_status == 'rejected_driver'){
                 $where_up = ['user_id' => $request->driver_id];
                 $vehicle_model::where($where_up)->update(['vehicle_status' => 'available']);  
-            }      
+            } 
             $trip_hist_model->his_type = 'trip_status';
             $trip_hist_model->user_id = $request->driver_id;
             $trip_hist_model->his_msg = $request->trip_status;
