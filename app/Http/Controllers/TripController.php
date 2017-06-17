@@ -125,7 +125,7 @@ class TripController extends Controller
             $trip_hist_model->trip_id = $trip_model->id;            
             $trip_hist_model->his_msg = 'pending';
             $trip_hist_model->save();
-            $this->sms($request->mobile,'Booking done successfully, Driver '.$driverdetails[0]->user_fname.' call: '.$driverdetails[0]->mobile);
+            //$this->sms($request->mobile,'Booking done successfully, Driver '.$driverdetails[0]->user_fname.' call: '.$driverdetails[0]->mobile);
             $res = [
                 'success' => 'Booking done successfully',
                 'error' => ''
@@ -165,8 +165,9 @@ class TripController extends Controller
             ->select('trip.*', 'users.user_fname', 'users.user_lname', 'users.mobile')
             ->where($where_ph)
             ->get(); 
-    	
-    	return $trip_notify;
+
+    	$res = ['data' => $trip_notify];
+        return json_encode($res);
     }
 
     public function trip_notify_driver(Request $request)
@@ -178,8 +179,9 @@ class TripController extends Controller
             ->select('trip.*', 'users.user_fname', 'users.user_lname', 'users.mobile')
             ->where($where_ph)
             ->get(); 
-        
-        return $trip_notify;
+            
+        $res = ['data' => $trip_notify];
+        return json_encode($res);
     }
 
     public function trip_status(Request $request)

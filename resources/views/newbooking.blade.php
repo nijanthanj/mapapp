@@ -110,7 +110,7 @@
 @extends('footer');
 <script src="assets/plugins/jQuery/jquery-1.12.4.min.js" type="text/javascript"></script>        
 <script src="assets/plugins/jquery-ui-1.12.1/jquery-ui.min.js" type="text/javascript"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBlrdksW4BHONkIuE4Cs0dMucG-uQiQHxk&libraries=places&callback=initMap"
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBlrdksW4BHONkIuE4Cs0dMucG-uQiQHxk&libraries=places"
         async defer></script>
 <script type="text/javascript"> 
     jQuery('#error').hide();
@@ -154,6 +154,7 @@
               method: "POST",
               data: data,            
               success: function(response){  
+                    var response = JSON.parse(response);                     
                     if(response.error){
                         alert(response.error);
                         $('#book').removeAttr('disabled');
@@ -173,12 +174,11 @@
   }
 
   function initialize(idspecific) {
-    var cityBounds = new google.maps.LatLngBounds(
-  new google.maps.LatLng(25.341233, 68.289986),
-  new google.maps.LatLng(25.450715, 68.428345));
+  //   var cityBounds = new google.maps.LatLngBounds(
+  // new google.maps.LatLng(25.341233, 68.289986),
+  // new google.maps.LatLng(25.450715, 68.428345));
 
-    var options = {     
-          bounds: cityBounds,
+    var options = {               
           types: ['geocode'],          
           componentRestrictions: {country: 'in'}
     };

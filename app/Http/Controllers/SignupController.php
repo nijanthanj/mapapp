@@ -187,7 +187,7 @@ class SignupController extends Controller
 
         if($result) {
             $res = [
-                'success' => 'Status updated successfully',
+                'success' => $request->online_status,
                 'error' => ''
             ];
         }else{

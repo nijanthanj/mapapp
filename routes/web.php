@@ -34,5 +34,5 @@ Route::post('/sendsms', 'TripController@sendsms');
 Route::post('/weekbar', 'TripController@weekbar');
 Route::post('/driver_trip_history', 'TripController@driver_trip_history');
 Route::post('/trip_deatils', 'TripController@trip_notify');
-
+Route::post('/trip_status', 'TripController@trip_status');
 
