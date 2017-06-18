@@ -272,7 +272,7 @@ class TripController extends Controller
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_POST, count($fields));
         curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($fields));
-
+        
         //execute post
         $result = curl_exec($ch);
 
@@ -327,6 +327,7 @@ class TripController extends Controller
             ->where($where_ph)
             ->get(); 
         
-        return $driver_trip_history;
+        $res = ['data' => $driver_trip_history];
+        return $res;
     }
 }

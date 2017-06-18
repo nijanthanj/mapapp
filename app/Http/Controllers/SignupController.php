@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Input;
 use Illuminate\Database\Eloquent\Model;
 use Storage;
 use League\Flysystem\Filesystem;
@@ -251,5 +252,12 @@ class SignupController extends Controller
         $result[0]->license = $custom_url.'/app/'.$result[0]->license;
         $result[0]->profile_photo = $custom_url.'/app/'.$result[0]->profile_photo;
         return $result;
+    }
+
+    public function users_profile()
+    {        
+        echo "<pre>";
+        $input = Input::get();
+        print_r($input);
     }
 }
