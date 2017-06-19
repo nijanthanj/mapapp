@@ -240,7 +240,7 @@
             for (var i = 0; i < myLatLng.fieldId.length; i++) {
                 var myobj = {};
                 myobj.lat = myLatLng.fieldId[i].lat;
-                myobj.lng = myLatLng.fieldId[i].lat;  
+                myobj.lng = myLatLng.fieldId[i].lon;  
                 var detail = myLatLng.fieldId[i].user_fname+' '+myLatLng.fieldId[i].user_lname+' '+myLatLng.fieldId[i].vehicle_reg_no+' '+myLatLng.fieldId[i].mobile;
                 createMarker(myobj,detail);
             }
