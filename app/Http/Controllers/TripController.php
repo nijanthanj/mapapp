@@ -165,10 +165,13 @@ class TripController extends Controller
             ->select('trip.*', 'users.user_fname', 'users.user_lname', 'users.mobile')
             ->where($where_ph)
             ->get(); 
-            
-        $trip_notify[0]->pickup = json_decode($trip_notify[0]->pickup);
-        $trip_notify[0]->dropoff = json_decode($trip_notify[0]->dropoff);            
-    	$res = ['data' => $trip_notify];
+        if(count($trip_notify)){
+            $trip_notify[0]->pickup = json_decode($trip_notify[0]->pickup);
+            $trip_notify[0]->dropoff = json_decode($trip_notify[0]->dropoff);            
+    	     $res = ['status' => 'success', 'data' => $trip_notify];
+        }else{
+            $res = ['status' => 'nodata', 'data' => $trip_notify];
+        }
         return $res;
     }
 
@@ -181,9 +184,13 @@ class TripController extends Controller
             ->select('trip.*', 'users.user_fname', 'users.user_lname', 'users.mobile')
             ->where($where_ph)
             ->get(); 
-        $trip_notify[0]->pickup = json_decode($trip_notify[0]->pickup);
-        $trip_notify[0]->dropoff = json_decode($trip_notify[0]->dropoff);            
-        $res = ['data' => $trip_notify];
+        if(count($trip_notify)){
+            $trip_notify[0]->pickup = json_decode($trip_notify[0]->pickup);
+            $trip_notify[0]->dropoff = json_decode($trip_notify[0]->dropoff);            
+             $res = ['status' => 'success', 'data' => $trip_notify];
+        }else{
+            $res = ['status' => 'nodata', 'data' => $trip_notify];
+        }
         return $res;
     }
 
@@ -326,8 +333,12 @@ class TripController extends Controller
             ->select('trip_id','updated_at','fare')
             ->where($where_ph)
             ->get(); 
+        if(count($driver_trip_history)){            
+             $res = ['status' => 'success', 'data' => $driver_trip_history];
+        }else{
+            $res = ['status' => 'nodata', 'data' => $driver_trip_history];
+        }
         
-        $res = ['data' => $driver_trip_history];
         return $res;
     }
 }
