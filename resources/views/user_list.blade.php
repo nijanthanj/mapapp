@@ -27,23 +27,90 @@
 
             <!-- sidebar menu -->
             <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
-              <div class="menu_section">                
+              <div class="menu_section">
                 <ul class="nav side-menu">
-                  <li><a href="<?php echo url('/').'/welcome'; ?>"><i class="fa fa-home"></i> Home</span></a>                   
+                  <li><a href="<?php echo url('/').'/welcome'; ?>"><i class="fa fa-home"></i> Dashboard</span></a>                   
                   </li>
-                  <li><a href="<?php echo url('/').'/newbooking'; ?>"><i class="fa fa-edit"></i> New Booking</a>                    
+                  <li><a><span><i class="fa fa-wrench"></i>Admin Control <i class="fa fa-chevron-down"></i></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="#">Role</a></li>
+                      <li><a href="#">Add Employee</a></li>
+                      <li><a href="#">View Employee</a></li> 
+                      <li><a href="#">Privilege</a></li>
+                    </ul>
                   </li>
-                  <li><a href="#"><i class="fa fa-edit"></i> Add manager</a>                    
+                  <li><a><span><i class="fa fa-list"></i>Service Type <i class="fa fa-chevron-down"></i></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="#">Add Service Type</a></li>   
+                      <li><a href="#">View Service Type</a></li> 
+                    </ul>
                   </li>
-                  <li><a href="<?php echo url('/').'/booking'; ?>"><i class="fa fa-taxi"></i> Bookings</span></a>                   
+                  <li><a><span><i class="fa fa-taxi"></i>Driver <i class="fa fa-chevron-down"></i></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="#">Add Driver</a></li>   
+                      <li><a href="#">View Driver</a></li> 
+                    </ul>
                   </li>
-                  <li><a href="<?php echo url('/').'/users'; ?>"><i class="fa fa-user"></i>Users</a>                    
+                  <li><a><span><i class="fa fa-male"></i>User <i class="fa fa-chevron-down"></i></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="#">Add User</a></li>   
+                      <li><a href="<?php echo url('/').'/users'; ?>">View User</a></li> 
+                    </ul>
                   </li>
-                  <li><a><i class="fa fa-file"></i>Reports</a>                    
+                  <li><a><span><i class="fa fa-map-marker"></i>Mapview</span></a>
+                  </li>
+                  <li><a><span><i class="fa fa-home"></i>Booking <i class="fa fa-chevron-down"></i></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="<?php echo url('/').'/newbooking'; ?>">New Booking</a></li>    
+                      <li><a href="<?php echo url('/').'/booking'; ?>">Booking History</a></li> 
+                    </ul>
+                  </li>
+                  <li><a><span><i class="fa fa-calendar"></i>Request <i class="fa fa-chevron-down"></i></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="#">Request History</a></li>    
+                      <li><a href="#">Scheduled  History</a></li> 
+                    </ul>
+                  </li>
+                  <li><a><span><i class="fa fa-star"></i>Rating & Review <i class="fa fa-chevron-down"></i></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="#">User Rating</a></li>    
+                      <li><a href="#">Driver Rating</a></li> 
+                    </ul>
+                  </li>
+                  <li><a><span><i class="fa fa-gift"></i>Promo Codes<i class="fa fa-chevron-down"></i></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="#">List Promo Codes</a></li>   
+                      <li><a href="#">Add Promo Codes</a></li> 
+                    </ul>
+                  </li>
+                  <li><a><span><i class="fa fa-money"></i>Payment Details <i class="fa fa-chevron-down"></i></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="#">Payment History</a></li>        
+                    </ul>
+                  </li>
+                  <li><a><span><i class="fa fa-dollar"></i>Earning <i class="fa fa-chevron-down"></i></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="#">Earning History</a></li>        
+                    </ul>
+                  </li>
+                  <li><a><span><i class="fa fa-download"></i>Report <i class="fa fa-chevron-down"></i></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="#">Trip Report </a></li>   
+                      <li><a href="#">Trip Summary </a></li> 
+                      <li><a href="#">Passenger Report </a></li>    
+                      <li><a href="#">Driver Online / Offline Details </a></li> 
+                    </ul>
+                  </li>
+                  <li><a><span><i class="fa fa-gear"></i>Setting <i class="fa fa-chevron-down"></i></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="#">View Profile </a></li>    
+                      <li><a href="#">Change Password </a></li> 
+                      <li><a href="#">Loout</a></li>  
+                    </ul>
                   </li>     
-                </ul>
-              </div>      
-            </div>           
+                </ul>             
+              </div>           
+            </div>
           </div>
         </div>
 
