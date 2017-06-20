@@ -113,7 +113,7 @@ class TripController extends Controller
         //$where_rate = ['user_id' => $final_driver];
         //$ratedetails = $rate_desc::where($where_rate)->get();
         if($trip_model->km > 1.8){
-            $trip_model->fare = 25+round(($trip_model->km - 1.8)*100*1.20);
+            $trip_model->fare = 25+round(($trip_model->km - 1.8)*10*1.20);
         }else{
             $trip_model->fare = 25;
         }        
