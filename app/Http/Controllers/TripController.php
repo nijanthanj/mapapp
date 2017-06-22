@@ -110,8 +110,7 @@ class TripController extends Controller
         $trip_model->duration = $this->distance($request->autocomplete1, $request->autocomplete2, "d");
         $trip_model->trip_status = 'pending';
         
-        //$where_rate = ['user_id' => $final_driver];
-        //$ratedetails = $rate_desc::where($where_rate)->get();
+        
         if($trip_model->km > 1.8){
             $trip_model->fare = 25+round(($trip_model->km - 1.8)*10*1.20);
         }else{
@@ -203,7 +202,7 @@ class TripController extends Controller
         
         $where = ['driver_id' => $request->driver_id,'trip_id' =>  $request->trip_id];
         $result = $trip_model::where($where)->update(['trip_status' => $request->trip_status]);
-        $pickup_details = $trip_model::where(['trip_id' =>  $request->trip_id])->pluck('pickup');
+        $pickup_details = $trip_model::where(['trip_id' =>  $request->trip_id])->get();
 
         if($result) {            
             if($request->trip_status == 'rejected_driver'){
@@ -213,7 +212,7 @@ class TripController extends Controller
                     $vehiclelist = [];
 
                     foreach ($veh_list as $key => $value) {
-                        $vehiclelist[$value->vehicle_id] = $this->distance(json_decode($pickup_details[0])->address, $value->address, "K");
+                        $vehiclelist[$value->vehicle_id] = $this->distance(json_decode($pickup_details[0]->pickup)->address, $value->address, "K");
                     }   
 
                     if(count($veh_list)){
@@ -235,7 +234,15 @@ class TripController extends Controller
             if($request->trip_status == 'dest_reached' || $request->trip_status == 'rejected_driver'){
                 $where_up = ['user_id' => $request->driver_id];
                 $vehicle_model::where($where_up)->update(['vehicle_status' => 'available']);  
-            } 
+            }
+            if($request->trip_status == 'trip_started'){
+                $trip_model::where($where)->update(['start_date' => date('Y-m-d H:i:s')]);
+            }  
+            if($request->trip_status == 'dest_reached'){
+                $duration = round((strtotime(date('Y-m-d H:i:s'))-strtotime($pickup_details[0]->start_date)) / 60);
+                $fare = $pickup_details[0]->fare + ($duration*0.5);
+                $trip_model::where($where)->update(['end_date' => date('Y-m-d H:i:s'), 'duration' => $duration, 'fare' => round($fare)]);
+            }  
             $trip_hist_model->his_type = 'trip_status';
             $trip_hist_model->user_id = $request->driver_id;
             $trip_hist_model->his_msg = $request->trip_status;

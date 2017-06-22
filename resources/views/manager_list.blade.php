@@ -66,7 +66,7 @@
                   <div class="dashboard_graph">
                     <div class="row x_title">
                       <div class="col-md-6">
-                        <h3>Users List</h3>
+                        <h3>Manger List</h3>
                       </div>                  
                     </div>
                     <div class="col-md-12 col-sm-12 col-xs-12">

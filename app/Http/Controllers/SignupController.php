@@ -9,6 +9,7 @@ use Storage;
 use League\Flysystem\Filesystem;
 use App\Register;
 use App\City;
+use App\Vehicles;
 use Mail;
 
 class SignupController extends Controller
@@ -183,9 +184,17 @@ class SignupController extends Controller
     public function status(Request $request)
     {        
         $register = new Register();
-        $where = ['user_email' => $request->email];
-        $result = $register::where($where)->update(['online_status' => $request->online_status]);
+        $vehicle_model = new Vehicles();
 
+        $where = ['user_id' => $request->user_id];
+        $result1 = $register::where($where)->update(['online_status' => $request->online_status]);
+        if($request->online_status == 'offline'){
+            $vehstat = 'notavailable';
+        }else {
+            $vehstat = 'available';
+        }
+        $result2 = $vehicle_model::where($where)->update(['vehicle_status' => $vehstat]);
+          
         if($result) {
             $res = [
                 'success' => $request->online_status,
@@ -236,8 +245,22 @@ class SignupController extends Controller
     public function userlist(Request $request)
     {
         $register = new Register();        
-        $result = $register->get();
+        $result = $register::where(['user_type'=> 'rider'])->get();
         return view('user_list', ['user_list' =>  $result]);        
+    }
+
+    public function driverlist(Request $request)
+    {
+        $register = new Register();        
+        $result = $register::where(['user_type'=> 'driver'])->orwhere(['user_type'=> 'driver_owner'])->orwhere(['user_type'=> 'owner'])->get();
+        return view('driver_list', ['user_list' =>  $result]);        
+    }
+
+    public function managerlist(Request $request)
+    {
+        $register = new Register();        
+        $result = $register::where(['user_type'=> 'admin'])->orwhere(['user_type'=> 'manager'])->get();
+        return view('manager_list', ['user_list' =>  $result]);        
     }
 
     public function user_account_details(Request $request)
