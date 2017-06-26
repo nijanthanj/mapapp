@@ -18,3 +18,102 @@
     <link href="<?php echo url('/'); ?>/build/css/custom.css" rel="stylesheet">
   </head>
 
+  <body class="nav-md">
+    <div class="container body">
+      <div class="main_container">
+        <div class="col-md-3 left_col">
+          <div class="left_col scroll-view">
+            <div class="navbar nav_title" style="border: 0;">
+              <a href="<?php echo url('/').'/welcome'; ?>" class="site_title"><i class="fa fa-taxi"></i> <span>UNGAL AUTO</span></a>
+            </div>
+
+            <div class="clearfix"></div>
+
+            <!-- menu profile quick info -->
+            <div class="profile clearfix">
+              <div class="profile_pic">
+                <img src="<?php echo url('/').'/images/Dummy.jpg'; ?>" alt="..." class="img-circle profile_img">
+              </div>
+              <div class="profile_info">
+                <span>Welcome,</span>
+                <h2>Super Admin</h2>
+              </div>
+            </div>
+            <!-- /menu profile quick info -->
+
+            <br />
+
+            <!-- sidebar menu -->
+            @include('sidebar');        
+          </div>
+        </div>
+
+        <!-- top navigation -->
+        <div class="top_nav">
+          <div class="nav_menu">
+            <nav>
+              <div class="nav toggle">
+                <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+              </div>
+
+              <ul class="nav navbar-nav navbar-right">
+                <li class="">
+                  <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                    <img src="<?php echo url('/').'/images/Dummy.jpg'; ?>" alt="">Super Admin
+                    <span class=" fa fa-angle-down"></span>
+                  </a>
+                  <ul class="dropdown-menu dropdown-usermenu pull-right">
+                    <li><a href="javascript:;"> Profile</a></li>
+                    <li>
+                      <a href="javascript:;">
+                        <span class="badge bg-red pull-right">50%</span>
+                        <span>Settings</span>
+                      </a>
+                    </li>
+                    <li><a href="javascript:;">Help</a></li>
+                    <li><a href="<?php echo url('/'); ?>"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
+                  </ul>
+                </li>                
+              </ul>
+            </nav>
+          </div>
+        </div>
+        <!-- /top navigation -->
+        <!-- page content -->
+        <div class="right_col" role="main">
+          <!-- top tiles -->          
+          <div class="row tile_count">
+            <div class="col-md-3 tile_stats_count">
+              <span class="count_top"><i class="fa fa-user"></i> Total Vehicle</span>
+              <div class="count veh_count">0</div>              
+            </div>
+            <div class="col-md-3 tile_stats_count">
+              <span class="count_top"><i class="fa fa-user"></i> Online Drivers</span>
+              <div class="count online_driver">0</div>              
+            </div>
+            <div class="col-md-3 tile_stats_count">
+              <span class="count_top"><i class="fa fa-user"></i> Offline Drivers</span>
+              <div class="count offline_driver">0</div>              
+            </div>
+            <div class="col-md-3 tile_stats_count">
+              <span class="count_top"><i class="fa fa-user"></i> En route</span>
+              <div class="count en_route">0</div>              
+            </div>
+            <div class="col-md-3">
+              <span class="count_top"><i class="fa fa-user"></i> Arrived</span>
+              <div style="font-size: 40px;font-weight: bold;padding-left: 10px;" class="count arrived">0</div>              
+            </div>
+            <div class="col-md-3 tile_stats_count">
+              <span class="count_top"><i class="fa fa-user"></i> Online Trips</span>
+              <div class="count online_trip">0</div>              
+            </div>
+            <div class="col-md-3 tile_stats_count">
+              <span class="count_top"><i class="fa fa-user"></i> Cancelled Trips</span>
+              <div class="count online_trip">0</div>              
+            </div>
+            <div class="col-md-3 tile_stats_count">
+              <span class="count_top"><i class="fa fa-money"></i> Total Collections</span>
+              <div class="count">&#8377;<span class="count tot_rate">0</span></div>              
+            </div>            
+          </div>
+          <!-- /top tiles -->

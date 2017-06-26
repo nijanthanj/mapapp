@@ -13,6 +13,8 @@
 
 Route::get('/', 'DashboardController@login');
 Route::get('/welcome', 'DashboardController@welcome');
+Route::get('/dashboard', 'DashboardController@dashboard');
+
 Route::get('/booking', 'TripController@booking');
 Route::get('/newbooking', 'TripController@newbooking');
 Route::get('/users', 'SignupController@userlist');
@@ -20,8 +22,8 @@ Route::get('/drivers', 'SignupController@driverlist');
 Route::get('/managers', 'SignupController@managerlist');
 Route::get('/users_profile/{user_id}', 'SignupController@users_profile');
 
-Route::post('/signup/validate', 'SignupController@checkemail');
-Route::post('/signup/register', 'SignupController@signup');
+Route::post('/signup/register', 'SignupController@register');
+Route::post('/signup/upload', 'SignupController@upload');
 Route::post('/signup/city', 'SignupController@citylist');
 Route::post('/login', 'SignupController@login');
 Route::post('/forgot', 'SignupController@forgot');

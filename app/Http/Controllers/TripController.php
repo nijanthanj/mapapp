@@ -124,7 +124,7 @@ class TripController extends Controller
             $trip_hist_model->trip_id = $trip_model->id;            
             $trip_hist_model->his_msg = 'pending';
             $trip_hist_model->save();
-            //$this->sms($request->mobile,'Booking done successfully, Driver '.$driverdetails[0]->user_fname.' call: '.$driverdetails[0]->mobile);
+            $this->sms($request->mobile,'Booking done successfully, Driver '.$driverdetails[0]->user_fname.' call: '.$driverdetails[0]->mobile);
             $res = [
                 'success' => 'Booking done successfully',
                 'error' => ''
@@ -142,7 +142,11 @@ class TripController extends Controller
     public function distance($origin, $destination, $mode) {
           
         $url = 'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&mode=driving&key=AIzaSyBlrdksW4BHONkIuE4Cs0dMucG-uQiQHxk&origins='.str_replace(' ', '', $origin).'&destinations='.str_replace(' ', '', $destination);
-        $data = file_get_contents($url);
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $data = curl_exec($ch);
+        curl_close($ch);        
         $data = utf8_decode($data);
         $obj = json_decode($data);
         if($mode == 'k'){
@@ -286,6 +290,7 @@ class TripController extends Controller
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_POST, count($fields));
         curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($fields));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         
         //execute post
         $result = curl_exec($ch);

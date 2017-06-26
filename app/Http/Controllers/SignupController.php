@@ -14,20 +14,11 @@ use Mail;
 
 class SignupController extends Controller
 {
-    public function signup(Request $request)
+    public function upload(Request $request)
     {          
-        $register = new Register();        
-        
-        $register->user_fname = $request->fname;   
-        $register->user_lname = $request->lname;
-        $register->user_email = $request->email;
-        $register->password = md5($request->passwrd); 
-        $register->mobile =$request->mob;
-        $register->city = $request->city;     
-        $register->user_type = $request->type;
-        $register->status = 'pending';             
-        
-
+        $register = new Register(); 
+        $data = $register::where(['user_id' =>$request->driver_id]); 
+        print_r($register);exit;
         $extension = '.jpg';
         if($request->drvlc){
             $filename = md5($request->email).'_drvlc'.$extension;
@@ -73,14 +64,8 @@ class SignupController extends Controller
                 $filename = md5($request->email).'_profile_photo'.$extension;
                 Storage::disk('local')->put($filename, base64_decode($request->profile_photo));            
             }                       
-            $data = ['fname' => $request->fname];
-            Mail::send('register', $data , function($message) use ($request){
-                $message->to($request->email)
-                ->subject('Registered successfully');
-            });
-            //$this->sms($request->mobile,'Your account registered successfully, Check your mail for more details.');
             $res = [
-                'success' => 'Registered successfully',
+                'success' => 'Uploaded successfully',
                 'error' => ''
             ];
         }else{
@@ -92,13 +77,13 @@ class SignupController extends Controller
         return json_encode($res);               
     }
 
-    public function checkemail(Request $request)
+    public function register(Request $request)
     {
         $register = new Register();
         $where_email = ['user_email' => $request->email];
         $count_email = $register::where($where_email)->count();
 
-        $where_ph = ['mobile' => $request->mobile];
+        $where_ph = ['mobile' => $request->mob];
         $count_ph = $register::where($where_ph)->count();
 
         if($count_email && $count_ph) {
@@ -117,13 +102,70 @@ class SignupController extends Controller
             'success' => ''
             ];
         }else{
-            $res = [
-                'success' => 'Email and phone number validated successfully',
-                'error' => ''
-            ];
+            $register = new Register();        
+        
+            $register->user_fname = $request->fname;   
+            $register->user_lname = $request->lname;
+            $register->user_email = $request->email;
+            $register->password = md5($request->passwrd); 
+            $register->mobile =$request->mob;
+            $register->city = $request->city;     
+            $register->user_type = $request->type;
+            $register->status = 'pending';  
+
+            if($register->save()){   
+                $data = ['fname' => $request->fname];
+                Mail::send('register', $data , function($message) use ($request){
+                    $message->to($request->email)
+                    ->subject('Registered successfully');
+                });
+                $this->sms($request->mobile,'Your account registered successfully, Check your mail for more details.');
+                
+                $res = [
+                    'success' => 'Registered successfully',
+                    'error' => ''
+                ];
+            }else{
+                $res = [
+                    'success' => '',
+                    'error' => 'Internal server error'
+                ];
+            }
         }        
         
        	return json_encode($res);
+    }
+
+    public function sms($number, $msg)
+    {
+        $url = 'http://bhashsms.com/api/sendmsg.php';
+
+        $fields = array(
+            'user'      => "cclenq",
+            'pass'      => "123",
+            'sender'    => "cclenq",
+            'phone'     => $number,
+            'text'      => $msg,
+            'priority'  => 'ndnd',
+            'type'      => 'normal'
+        );
+
+        //open connection
+        $ch = curl_init();
+
+        //set the url, number of POST vars, POST data
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, count($fields));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($fields));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        
+        //execute post
+        $result = curl_exec($ch);
+
+        //close connection
+        curl_close($ch);
+
+        return;
     }
 
     public function login(Request $request)
@@ -187,15 +229,18 @@ class SignupController extends Controller
         $vehicle_model = new Vehicles();
 
         $where = ['user_id' => $request->user_id];
+
         $result1 = $register::where($where)->update(['online_status' => $request->online_status]);
+
         if($request->online_status == 'offline'){
             $vehstat = 'notavailable';
         }else {
             $vehstat = 'available';
         }
+
         $result2 = $vehicle_model::where($where)->update(['vehicle_status' => $vehstat]);
           
-        if($result) {
+        if($result1 && $result2) {
             $res = [
                 'success' => $request->online_status,
                 'error' => ''

@@ -21,26 +21,36 @@ class DashboardController extends Controller
         $vehicle_model = new Vehicles();     
         $trip_hist_model = new TripHistory();
         $trip_model = new Trip();
-
-        $where_veh = ['vehicle_status' => 'available'];        
+           
         $driver_location = DB::table('vehicles')
             ->join('users', 'vehicles.user_id', '=', 'users.user_id')
-            ->select('vehicles.*', 'users.user_fname', 'users.user_lname', 'users.mobile')
-            ->where($where_veh)
-            ->get();                        
-    	
-        
+            ->select('vehicles.*', 'users.user_fname', 'users.user_lname', 'users.mobile')            
+            ->get();  
+
+    	return view('welcome', ['driver_location' =>  $driver_location,'trip_hist' => $trip_hist_model->get()]);
+    }
+
+
+    public function dashboard(Request $request)
+    {
+        $register = new Register();    
+        $vehicle_model = new Vehicles();     
+        $trip_hist_model = new TripHistory();
+        $trip_model = new Trip();
 
         $tot_rate = DB::select("SELECT sum(fare) as fare FROM trip where trip_status = 'dest_reached' ");
 
-    	return view('welcome', ['driver_location' =>  $driver_location,
-                                'trip_hist' => $trip_hist_model->get(), 
-                                'online_trip' => $trip_model::where(['trip_status' => 'trip_started'])->count(), 
-                                'online_driver' => $register::where(['user_type' => 'driver', 'online_status' => 'online'])->count(), 
-                                'tot_driver' => $register::where(['user_type' => 'driver'])->count(), 
-                                'tot_rate' => $tot_rate[0]->fare,
-                                'contact_count' => count($register->get())
-                            ]);
+        $result = [             
+            'en_route' => $trip_model::where(['trip_status' => 'accepted'])->count(), 
+            'arrived' => $trip_model::where(['trip_status' => 'driver_arrived'])->count(), 
+            'online_trip' => $trip_model::where(['trip_status' => 'trip_started'])->count(), 
+            'cancelled_trip' => $trip_model::where(['trip_status' => 'cancelled_user'])->count(), 
+            'online_driver' => $register::where(['user_type' => 'driver', 'online_status' => 'online'])->count(), 
+            'offline_driver' => $register::where(['user_type' => 'driver', 'online_status' => 'offline'])->count(), 
+            'tot_rate' => $tot_rate[0]->fare,
+            'veh_count' => count($vehicle_model->get())
+        ];
+        return json_encode($result);
     }
 
 	public function login(Request $request)

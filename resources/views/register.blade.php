@@ -1,7 +1,7 @@
 Hi {{$fname}}
 
 <p>Registered successfull in to the application</p>
-<p>After approval password will be sent to you via mail</p>
+<p>Please login and continue.</p>
 
 Thanks<br/>
 ADMIN
