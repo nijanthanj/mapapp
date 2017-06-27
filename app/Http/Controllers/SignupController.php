@@ -17,58 +17,55 @@ class SignupController extends Controller
     public function upload(Request $request)
     {          
         $register = new Register(); 
-        $data = $register::where(['user_id' =>$request->driver_id]); 
-        print_r($register);exit;
+        $where = ['user_id' =>$request->driver_id];
+
         $extension = '.jpg';
-        if($request->drvlc){
-            $filename = md5($request->email).'_drvlc'.$extension;
-            $register->license = $filename;               
-        }
-        if($request->cominsur){
-            $filename = md5($request->email).'_cominsur'.$extension;
-            $register->insurance = $filename;             
-        }
-        if($request->certreg){
-            $filename = md5($request->email).'_certreg'.$extension;
-            $register->permit = $filename;              
-        }
-        if($request->carpermt){
-            $filename = md5($request->email).'_carpermt'.$extension;
-            $register->reg_cert = $filename;            
-        } 
-        if($request->profile_photo){
-            $filename = md5($request->email).'_profile_photo'.$extension;
-            $register->profile_photo = $filename;          
-        }   
-
-        if($register->save()){            
-
-            $extension = '.jpg';
-            if($request->drvlc){
-                $filename = md5($request->email).'_drvlc'.$extension;
-                Storage::disk('local')->put($filename, base64_decode($request->drvlc));            
-            }
-            if($request->cominsur){
-                $filename = md5($request->email).'_cominsur'.$extension;
-                Storage::disk('local')->put($filename, base64_decode($request->cominsur));            
-            }
-            if($request->certreg){
-                $filename = md5($request->email).'_certreg'.$extension;
-                Storage::disk('local')->put($filename, base64_decode($request->certreg));            
-            }
-            if($request->carpermt){
-                $filename = md5($request->email).'_carpermt'.$extension;
-                Storage::disk('local')->put($filename, base64_decode($request->carpermt));            
-            }  
-            if($request->profile_photo){
-                $filename = md5($request->email).'_profile_photo'.$extension;
-                Storage::disk('local')->put($filename, base64_decode($request->profile_photo));            
-            }                       
+        if($request->drvlc){            
+            $filename = md5($request->email).'_drvlc'.$extension;  
+            Storage::disk('local')->put($filename, base64_decode($request->drvlc));                      
+            $register::where($where)->update(['license' => $filename]);    
             $res = [
                 'success' => 'Uploaded successfully',
                 'error' => ''
-            ];
-        }else{
+            ];         
+        }
+        elseif($request->cominsur){
+            $filename = md5($request->email).'_cominsur'.$extension;
+            Storage::disk('local')->put($filename, base64_decode($request->cominsur));                          
+            $register::where($where)->update(['insurance' => $filename]);   
+            $res = [
+                'success' => 'Uploaded successfully',
+                'error' => ''
+            ];        
+        }
+        elseif($request->certreg){
+            $filename = md5($request->email).'_certreg'.$extension;
+            Storage::disk('local')->put($filename, base64_decode($request->certreg)); 
+            $register::where($where)->update(['permit' => $filename]); 
+            $res = [
+                'success' => 'Uploaded successfully',
+                'error' => ''
+            ];                     
+        }
+        elseif($request->carpermt){
+            $filename = md5($request->email).'_carpermt'.$extension;
+            Storage::disk('local')->put($filename, base64_decode($request->carpermt)); 
+            $register::where($where)->update(['reg_cert' => $filename]);  
+            $res = [
+                'success' => 'Uploaded successfully',
+                'error' => ''
+            ];                    
+        } 
+        elseif($request->profile_photo){
+            $filename = md5($request->email).'_profile_photo'.$extension;
+            Storage::disk('local')->put($filename, base64_decode($request->profile_photo));   
+            $register::where($where)->update(['profile_photo' => $filename]);   
+            $res = [
+                'success' => 'Uploaded successfully',
+                'error' => ''
+            ];               
+        }  
+        else{
             $res = [
                 'success' => '',
                 'error' => 'Internal server error'
@@ -91,19 +88,17 @@ class SignupController extends Controller
             'error' => 'Email and phone number already exists',
             'success' => ''
             ];
-        }else if($count_email) {
+        }elseif($count_email) {
             $res = [
             'error' => 'Email already exists',
             'success' => ''
             ];
-        }else if($count_ph) {
+        }elseif($count_ph) {
             $res = [
             'error' => 'Phone number already exists',
             'success' => ''
             ];
-        }else{
-            $register = new Register();        
-        
+        }else{                   
             $register->user_fname = $request->fname;   
             $register->user_lname = $request->lname;
             $register->user_email = $request->email;
@@ -175,15 +170,24 @@ class SignupController extends Controller
         $result = $register::where($where)->get();  
         
         if(count($result) && $result[0]->user_id) {
+            $nulllist = array('reg_cert','insurance','permit','license','profile_photo');
+            foreach ($nulllist as $key => $value) {
+                if($result[0]->$value){
+                    unset($nulllist[$key]);
+                }
+            }
             $res = [
                 'success' => 'Logged in successfully',
                 'driver_id' => $result[0]->user_id,
+                'not_uploaded' => array_values($nulllist),
                 'error' => ''
             ];
         }else{
+            $nulllist = [];
             $res = [
                 'success' => '',
                 'driver_id' => 0,
+                'not_uploaded' => 0,
                 'error' => 'Username or password is incorrect'
             ];
         }

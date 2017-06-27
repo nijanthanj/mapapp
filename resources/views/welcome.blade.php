@@ -59,13 +59,15 @@
           myobj.lat = myLatLng.fieldId[i].lat;
           myobj.lng = myLatLng.fieldId[i].lon;  
           var detail = myLatLng.fieldId[i].user_fname+' '+myLatLng.fieldId[i].user_lname+' '+myLatLng.fieldId[i].vehicle_reg_no+' '+myLatLng.fieldId[i].mobile;
-          createMarker(myobj,detail);
+          var icon = "<?php echo url('/').'/images/'; ?>"+myLatLng.fieldId[i].vehicle_status+'.png';
+          createMarker(myobj,detail,icon);
       }
-      function createMarker(place,detail) {
+      function createMarker(place,detail,icon) {
         console.log(place);
         var marker = new google.maps.Marker({
           position: place,
           map: map,
+          icon: icon,
           title: detail
         });
      }

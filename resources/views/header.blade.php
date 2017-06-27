@@ -104,7 +104,7 @@
               <div style="font-size: 40px;font-weight: bold;padding-left: 10px;" class="count arrived">0</div>              
             </div>
             <div class="col-md-3 tile_stats_count">
-              <span class="count_top"><i class="fa fa-user"></i> Online Trips</span>
+              <span class="count_top"><i class="fa fa-user"></i> Ontrip</span>
               <div class="count online_trip">0</div>              
             </div>
             <div class="col-md-3 tile_stats_count">
