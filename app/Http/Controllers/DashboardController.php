@@ -45,8 +45,8 @@ class DashboardController extends Controller
             'arrived' => $trip_model::where(['trip_status' => 'driver_arrived'])->count(), 
             'online_trip' => $trip_model::where(['trip_status' => 'trip_started'])->count(), 
             'cancelled_trip' => $trip_model::where(['trip_status' => 'cancelled_user'])->count(), 
-            'online_driver' => $register::where(['user_type' => 'driver', 'online_status' => 'online'])->count(), 
-            'offline_driver' => $register::where(['user_type' => 'driver', 'online_status' => 'offline'])->count(), 
+            'online_driver' => $register::where(['user_type' => 'driver', 'online_status' => 'online', 'status' => 'approved'])->count(), 
+            'offline_driver' => $register::where(['user_type' => 'driver', 'online_status' => 'offline', 'status' => 'approved'])->count(), 
             'tot_rate' => $tot_rate[0]->fare,
             'veh_count' => count($vehicle_model->get())
         ];

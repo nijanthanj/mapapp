@@ -18,6 +18,7 @@
                                         <th>TYPE</th>                        
                                         <th>STATUS</th>
                                         <th>ACTION</th>
+                                        <th>VIEW</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -30,11 +31,11 @@
                                             <td class="upper">{{$user_list->status}}</td> 
                                             <td class="upper">
                                                 @if ($user_list->status == 'pending')
-                                                    <i title="Approve" onclick="approve('<?php echo $user_list->user_email; ?>','approved');" class="fa fa-check"></i>
-                                                    <i title="Reject" onclick="approve('<?php echo $user_list->user_email; ?>','rejected');" class="fa fa-times"></i>
+                                                    <i title="Approve" onclick="approve('<?php echo $user_list->user_email; ?>','approved');" class="btn btn-success fa fa-check"></i>
+                                                    <i title="Reject" onclick="approve('<?php echo $user_list->user_email; ?>','rejected');" class="btn btn-danger fa fa-times"></i>
                                                 @endif
                                                 @if ($user_list->status == 'approved')
-                                                    <i title="Block" onclick="approve('<?php echo $user_list->user_email; ?>','blocked');" class="fa fa-ban"></i>
+                                                    <i title="Block" onclick="approve('<?php echo $user_list->user_email; ?>','blocked');" class="btn btn-danger fa fa-ban"></i>
                                                 @endif
                                                 @if ($user_list->status == 'blocked')
                                                     <span class="upper badge bg-red">Blocked</span>
@@ -43,6 +44,9 @@
                                                     <span class="upper badge bg-red">Rejected</span>
                                                 @endif                            
                                             </td> 
+                                            <td class="upper">
+                                                <a href="<?php echo url('/').'/users_profile/'; ?>{{$user_list->user_id}}"> <i class="btn btn-success fa fa-eye"></i></a>
+                                            </td>
                                         </tr>
                                     @endforeach
 
@@ -61,7 +65,7 @@
     function approve(email,status){
         var con = confirm("Are you sure to do the action");
         if(con == true){
-        var successurl = '<?php echo URL::to('/');?>'+'/user';
+        var successurl = '<?php echo URL::to('/');?>'+'/users';
             var apiurl = '<?php echo URL::to('/');?>'+'/aprrove';
             var data = {email : email,
                         status : status

@@ -7,8 +7,10 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Database\Eloquent\Model;
 use Storage;
 use League\Flysystem\Filesystem;
+use Illuminate\Support\Facades\DB;
 use App\Register;
 use App\City;
+use App\Trip;
 use App\Vehicles;
 use Mail;
 
@@ -262,21 +264,34 @@ class SignupController extends Controller
     public function aprrove(Request $request)
     {        
         $register = new Register();
+        $vehicle_model = new Vehicles();       
         $where = ['user_email' => $request->email];
         $stat = $register::where($where)->update(['status' => $request->status]);        
-        
-        if($request->status == 'approved'){
-            $result = $register::where($where)->get();
+        $result = $register::where($where)->get();
+
+        if($request->status == 'approved' && $request->reg_no){            
+            $vehicle_model->vehicle_reg_no = $request->reg_no;
+            $vehicle_model->user_id = $result[0]->user_id;
+            $vehicle_model->no_of_seats = 3;
+            $vehicle_model->max_passenger = 3;
+            $vehicle_model->lat = 11.0973864;
+            $vehicle_model->lon = 76.83860410000003;
+            $vehicle_model->address = 'Coimbatore';
+            $vehicle_model->vehicle_status = 'notavailable';
+            $vehicle_model->save();
+        }elseif($request->status != 'approved' && $request->reg_no){            
+            $where_up = ['user_id' => $result[0]->user_id];
+            $vehicle_model::where($where_up)->update(['vehicle_status' => 'notavailable']);  
         }
-        if(count($result) && $result[0]->user_email) {
-            $newpass = rand(100000,10000000);
-            $passreset = $register::where($where)->update(['password' => md5($newpass)]);
-            $data = ['password' => $newpass, 'fname' => $result[0]->fname];
+
+        if(count($result) && $result[0]->user_email) {            
+            $data = ['fname' => $result[0]->fname, 'status' => $request->status];
             Mail::send('mail', $data , function($message) use ($result){
                 $message->to($result[0]->user_email)
-                ->subject('Your application password');
+                ->subject('Account status - UNGAL AUTO');
             });
         }
+
         if($stat){
         $res = [
                 'success' => 'Status updated successfully',
@@ -318,18 +333,41 @@ class SignupController extends Controller
         $where = ['user_id' => $request->user_id];
         $result = $register::where($where)->get();        
         $custom_url =  str_replace('public','storage',url('/'));
-        $result[0]->reg_cert = $custom_url.'/app/'.$result[0]->reg_cert;
-        $result[0]->insurance = $custom_url.'/app/'.$result[0]->insurance;
-        $result[0]->permit = $custom_url.'/app/'.$result[0]->permit;
-        $result[0]->license = $custom_url.'/app/'.$result[0]->license;
-        $result[0]->profile_photo = $custom_url.'/app/'.$result[0]->profile_photo;
+        if($result[0]->reg_cert) $result[0]->reg_cert = $custom_url.'/app/'.$result[0]->reg_cert;
+        if($result[0]->insurance) $result[0]->insurance = $custom_url.'/app/'.$result[0]->insurance;
+        if($result[0]->permit) $result[0]->permit = $custom_url.'/app/'.$result[0]->permit;
+        if($result[0]->license) $result[0]->license = $custom_url.'/app/'.$result[0]->license;
+        if($result[0]->profile_photo) $result[0]->profile_photo = $custom_url.'/app/'.$result[0]->profile_photo;
         return $result;
     }
 
-    public function users_profile()
+    public function users_profile($user_id)
     {        
-        echo "<pre>";
-        $input = Input::get();
-        print_r($input);
+        $register = new Register(); 
+        $trip_model = new Trip();    
+
+        $where = ['user_id' => $user_id];
+        $result = $register::where($where)->get();        
+        $custom_url =  str_replace('public','storage',url('/'));
+        if($result[0]->reg_cert) $result[0]->reg_cert = $custom_url.'/app/'.$result[0]->reg_cert;
+        if($result[0]->insurance) $result[0]->insurance = $custom_url.'/app/'.$result[0]->insurance;
+        if($result[0]->permit) $result[0]->permit = $custom_url.'/app/'.$result[0]->permit;
+        if($result[0]->license) $result[0]->license = $custom_url.'/app/'.$result[0]->license;
+        if($result[0]->profile_photo) $result[0]->profile_photo = $custom_url.'/app/'.$result[0]->profile_photo;
+        
+        if($result[0]->user_type == 'rider'){
+            $wheretrip = ['user_id' => $user_id];
+        }else{
+            $wheretrip = ['driver_id' => $user_id];
+        }
+
+        $trip_details = $trip_model::where($wheretrip)->get();        
+
+       foreach ($trip_details as $key => $value) {
+           $trip_details[$key]->pickup = json_decode($trip_details[$key]->pickup);
+           $trip_details[$key]->dropoff = json_decode($trip_details[$key]->dropoff);
+       }
+       
+        return view('user_profile', ['user_data' =>  $result[0], 'trip_details' =>  $trip_details]);        
     }
 }
