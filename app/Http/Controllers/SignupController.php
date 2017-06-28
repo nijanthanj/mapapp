@@ -53,6 +53,17 @@ class SignupController extends Controller
             $filename = md5($request->email).'_carpermt'.$extension;
             Storage::disk('local')->put($filename, base64_decode($request->carpermt)); 
             $register::where($where)->update(['reg_cert' => $filename]);  
+
+            $result = $register::where($where)->get();
+
+            $data = ['fname' => $result[0]->user_fname];
+            Mail::send('register', $data , function($message) use ($result){
+                $message->to($result[0]->user_email)
+                ->subject('Registered successfully');
+            });
+
+            $this->sms($result[0]->mobile,'Your account registered successfully, Check your mail for more details.');
+                
             $res = [
                 'success' => 'Uploaded successfully',
                 'error' => ''
@@ -62,6 +73,7 @@ class SignupController extends Controller
             $filename = md5($request->email).'_profile_photo'.$extension;
             Storage::disk('local')->put($filename, base64_decode($request->profile_photo));   
             $register::where($where)->update(['profile_photo' => $filename]);   
+            
             $res = [
                 'success' => 'Uploaded successfully',
                 'error' => ''
@@ -110,21 +122,16 @@ class SignupController extends Controller
             $register->user_type = $request->type;
             $register->status = 'pending';  
 
-            if($register->save()){   
-                $data = ['fname' => $request->fname];
-                Mail::send('register', $data , function($message) use ($request){
-                    $message->to($request->email)
-                    ->subject('Registered successfully');
-                });
-                $this->sms($request->mobile,'Your account registered successfully, Check your mail for more details.');
-                
+            if($register->save()){                  
                 $res = [
                     'success' => 'Registered successfully',
+                    'user_id' => $register->id,
                     'error' => ''
                 ];
             }else{
                 $res = [
                     'success' => '',
+                    'user_id' => 0,
                     'error' => 'Internal server error'
                 ];
             }
