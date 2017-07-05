@@ -233,6 +233,9 @@ class TripController extends Controller
                         $wheretrip = ['trip_id' =>  $request->trip_id];
                         $trip_model::where($wheretrip)->update(['vehicle_id' => $getvehicle[0] ,'driver_id' => $driverdetails[0]->user_id,'trip_status' => 'pending','driver_name' => $driverdetails[0]->user_fname.' '.$driverdetails[0]->user_lname,'driver_mobile' => $driverdetails[0]->mobile]);                        
                         $vehicle_model::where($where_driver)->update(['vehicle_status' => 'ontrip']);  
+                    }else{
+                        $wheretrip = ['trip_id' =>  $request->trip_id];
+                        $trip_model::where($wheretrip)->update(['vehicle_id' => $getvehicle[0] ,'driver_id' => $driverdetails[0]->user_id,'trip_status' => 'rejected_driver','driver_name' => $driverdetails[0]->user_fname.' '.$driverdetails[0]->user_lname,'driver_mobile' => $driverdetails[0]->mobile]);                        
                     }
             }      
             if($request->trip_status == 'dest_reached' || $request->trip_status == 'rejected_driver'){
