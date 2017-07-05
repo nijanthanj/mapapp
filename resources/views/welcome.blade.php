@@ -5,6 +5,7 @@
       <div class="row x_title">
         <div class="col-md-6">
           <h3>Driver Activities <small>Vehicle Current location</small></h3>
+          <button onclick="initMap();" class="pull-right btn fa fa-refresh"></button>
         </div>                  
       </div>
       <div class="col-md-9 col-sm-9 col-xs-12">
@@ -80,7 +81,7 @@
      }
   }
   initMap();
-      window.setInterval(function(){
-        initMap();
-      }, 10000);
+      // window.setInterval(function(){
+      //   initMap();
+      // }, 10000);
 </script>

@@ -38,22 +38,19 @@
                                       <td>&#8377;{{$booking_list->fare}}</td>     
                                       <td>
                                           @if ($booking_list->trip_status == 'pending')
-                                              <span class="upper badge bg-darkbluebg">{{$booking_list->trip_status}}</span>
-                                          @endif
-                                          @if ($booking_list->trip_status == 'accepted')
-                                              <span class="upper badge bg-yellow">{{$booking_list->trip_status}}</span>
-                                          @endif
-                                          @if ($booking_list->trip_status == 'driver_arrived')
+                                              <span class="upper badge bg-darkbluebg">{{$booking_list->trip_status}}</span>                                          
+                                          @elseif ($booking_list->trip_status == 'accepted')
+                                              <span class="upper badge bg-yellow">{{$booking_list->trip_status}}</span>                                          
+                                          @elseif ($booking_list->trip_status == 'driver_arrived')
                                               <span class="upper badge bg-orange">Trip started</span>
-                                          @endif
-                                          @if ($booking_list->trip_status == 'dest_reached')
+                                          @elseif ($booking_list->trip_status == 'dest_reached')
                                               <span class="upper badge bg-green">Completed</span>
-                                          @endif
-                                          @if ($booking_list->trip_status == 'cancelled_user')
+                                          @elseif ($booking_list->trip_status == 'cancelled_user')
                                               <span class="upper badge bg-red">Cancelled</span>
-                                          @endif
-                                          @if ($booking_list->trip_status == 'rejected_driver')
+                                          @elseif ($booking_list->trip_status == 'rejected_driver')
                                               <span class="upper badge bg-red">Rejected</span>
+                                          @else 
+                                              <span class="upper badge bg-blue">{{$booking_list->trip_status}}</span>
                                           @endif                               
                                       </td>                                         
                                   </tr>

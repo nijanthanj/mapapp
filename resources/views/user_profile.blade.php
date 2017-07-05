@@ -34,15 +34,15 @@
 						<td class="col-md-8">{{$user_data->mobile}}</td>						
 					</tr>
 					<tr>
-						<b><td class="col-md-2">city</td><b/>
+						<b><td class="col-md-2">City</td><b/>
 						<td class="col-md-8">{{$user_data->city}}</td>						
 					</tr>
 					<tr>
-						<b><td class="col-md-2">status</td><b/>
+						<b><td class="col-md-2">Status</td><b/>
 						<td class="col-md-8">{{$user_data->status}}</td>						
 					</tr>
 					<tr>
-						<b><td class="col-md-2">online status</td><b/>
+						<b><td class="col-md-2">Driver status</td><b/>
 						<td class="col-md-8">{{$user_data->online_status}}</td>						
 					</tr>
 				</table>

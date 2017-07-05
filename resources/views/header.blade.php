@@ -88,11 +88,11 @@
               <div class="count veh_count">0</div>              
             </div>
             <div class="col-md-1 tile_stats_count">
-              <span class="count_top"><i class="fa fa-user"></i> Online</span>
+              <span class="count_top"><i class="fa fa-user"></i> Available</span>
               <div class="count online_vehicles">0</div>              
             </div>
-            <div class="col-md-1 tile_stats_count">
-              <span class="count_top"><i class="fa fa-user"></i> Offline </span>
+            <div class="col-md-2 tile_stats_count">
+              <span class="count_top"><i class="fa fa-user"></i> Not available </span>
               <div class="count offline_vehicles">0</div>              
             </div>
             <div class="col-md-1 tile_stats_count">
