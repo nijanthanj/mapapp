@@ -100,16 +100,19 @@ class SignupController extends Controller
         if($count_email && $count_ph) {
             $res = [
             'error' => 'Email and phone number already exists',
+            'user_id' => 0,
             'success' => ''
             ];
         }elseif($count_email) {
             $res = [
             'error' => 'Email already exists',
+            'user_id' => 0,
             'success' => ''
             ];
         }elseif($count_ph) {
             $res = [
             'error' => 'Phone number already exists',
+            'user_id' => 0,
             'success' => ''
             ];
         }else{                   
@@ -175,7 +178,7 @@ class SignupController extends Controller
     public function login(Request $request)
     {                   
         $register = new Register();        
-        $where = ['user_email' => $request->user_email, 'password' => md5($request->password)];
+        $where = ['user_email' => $request->user_email, 'password' => md5($request->password), 'status' => 'approved'];
         $result = $register::where($where)->get();  
         
         if(count($result) && $result[0]->user_id) {
@@ -196,7 +199,7 @@ class SignupController extends Controller
             $res = [
                 'success' => '',
                 'driver_id' => 0,
-                'not_uploaded' => 0,
+                'not_uploaded' => array_values($nulllist),
                 'error' => 'Username or password is incorrect'
             ];
         }
@@ -213,7 +216,7 @@ class SignupController extends Controller
             $newpass = rand(100000,10000000);
             $passreset = $register::where($where)->update(['password' => md5($newpass)]);
             $data = ['password' => $newpass, 'fname' => $result[0]->fname];
-            Mail::send('mail', $data , function($message) use ($result){
+            Mail::send('forgot', $data , function($message) use ($result){
                 $message->to($result[0]->user_email)
                 ->subject('Your application password');
             });
@@ -291,7 +294,14 @@ class SignupController extends Controller
             $vehicle_model::where($where_up)->update(['vehicle_status' => 'notavailable']);  
         }
 
-        if(count($result) && $result[0]->user_email) {            
+        if(count($result) && $result[0]->user_email) {  
+            if($request->status = 'approved'){
+                $smsmsg = "Your account has been approved successfully";
+            }else if($request->status = 'blocked' || $request->status = ''){
+                $smsmsg = "Your account has been ".$request->status." due to some reason. Contact admin for more details.";
+            }
+                     
+            $this->sms($result[0]->mobile,$smsmsg);
             $data = ['fname' => $result[0]->fname, 'status' => $request->status];
             Mail::send('mail', $data , function($message) use ($result){
                 $message->to($result[0]->user_email)

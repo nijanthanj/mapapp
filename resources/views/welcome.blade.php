@@ -1,8 +1,7 @@
 @include('header');
 <div class="row">
   <div class="col-md-12 col-sm-12 col-xs-12">
-    <div class="dashboard_graph">
-      <div id="field" data-field-id="{{$driver_location}}" ></div>
+    <div class="dashboard_graph">      
       <div class="row x_title">
         <div class="col-md-6">
           <h3>Driver Activities <small>Vehicle Current location</small></h3>
@@ -46,24 +45,32 @@
 @include('footer');
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBlrdksW4BHONkIuE4Cs0dMucG-uQiQHxk&libraries=places&callback=initMap"
         async defer></script>
-<script type="text/javascript">
-  var myLatLng = $('#field').data();   
+<script type="text/javascript">    
      
   function initMap() {
       var map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 10,
-        center: {lat: 11.0210, lng: 76.9663}
-      });     
-      for (var i = 0; i < myLatLng.fieldId.length; i++) {
-          var myobj = {};
-          myobj.lat = myLatLng.fieldId[i].lat;
-          myobj.lng = myLatLng.fieldId[i].lon;  
-          var detail = myLatLng.fieldId[i].user_fname+' '+myLatLng.fieldId[i].user_lname+' '+myLatLng.fieldId[i].vehicle_reg_no+' '+myLatLng.fieldId[i].mobile;
-          var icon = "<?php echo url('/').'/images/'; ?>"+myLatLng.fieldId[i].vehicle_status+'.png';
-          createMarker(myobj,detail,icon);
-      }
-      function createMarker(place,detail,icon) {
-        console.log(place);
+          zoom: 10,
+          center: {lat: 11.0210, lng: 76.9663}
+        }); 
+      var apiurl = '<?php echo URL::to('/');?>'+'/welcomemap';    
+      $.ajax({
+        url: apiurl,
+        method: "GET",
+        success: function(response){  
+            var response = JSON.parse(response);  
+            myLatLng = response;      
+            for (var i = 0; i < myLatLng.length; i++) {
+                var myobj = {};
+                myobj.lat = myLatLng[i].lat;
+                myobj.lng = myLatLng[i].lon;  
+                var detail = myLatLng[i].user_fname+' '+myLatLng[i].user_lname+' '+myLatLng[i].vehicle_reg_no+' '+myLatLng[i].mobile;
+                var icon = "<?php echo url('/').'/images/'; ?>"+myLatLng[i].vehicle_status+'.png';                
+                createMarker(myobj,detail,icon);
+            }      
+          }
+      });                
+      
+      function createMarker(place,detail,icon) {               
         var marker = new google.maps.Marker({
           position: place,
           map: map,
@@ -72,4 +79,8 @@
         });
      }
   }
+  initMap();
+      window.setInterval(function(){
+        initMap();
+      }, 10000);
 </script>

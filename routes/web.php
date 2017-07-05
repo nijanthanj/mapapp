@@ -14,6 +14,7 @@
 Route::get('/', 'DashboardController@login');
 Route::get('/welcome', 'DashboardController@welcome');
 Route::get('/dashboard', 'DashboardController@dashboard');
+Route::get('/welcomemap', 'DashboardController@welcomemap');
 
 Route::get('/booking', 'TripController@booking');
 Route::get('/newbooking', 'TripController@newbooking');

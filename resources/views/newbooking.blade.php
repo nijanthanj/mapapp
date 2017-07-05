@@ -83,9 +83,7 @@
                     if(response.error){
                         alert(response.error);
                         $('#book').removeAttr('disabled');
-                    }else if(response.success){    
-                        alert(response.success);      
-                        $('#book').removeAttr('disabled');      
+                    }else if(response.success){         
                         location.href = successurl;
                     }
                 }

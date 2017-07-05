@@ -1691,8 +1691,7 @@ span.right {
 .tile_count .tile_stats_count {
     border-bottom: 1px solid #D9DEE4;
     padding: 0 10px 0 20px;
-    text-overflow: ellipsis;
-    overflow: hidden;
+    text-overflow: ellipsis;    
     white-space: nowrap;
     position: relative
 }
@@ -4245,4 +4244,16 @@ table thead .checkbox.radio { margin-top:-7px;margin-top:-21px; }
 
 .upper {
     text-transform: uppercase;
+}
+
+#myImg {
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+#myImg:hover {opacity: 0.7;}
+
+.padd-5{
+    padding: 5px !important;
 }

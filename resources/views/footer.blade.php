@@ -36,8 +36,8 @@
                 $('.arrived').html(response.arrived);
                 $('.online_trip').html(response.online_trip);
                 $('.cancelled_trip').html(response.cancelled_trip);
-                $('.online_driver').html(response.online_driver);
-                $('.offline_driver').html(response.offline_driver);
+                $('.online_vehicles').html(response.online_vehicles);
+                $('.offline_vehicles').html(response.offline_vehicles);
                 $('.tot_rate').html(response.tot_rate);
                 $('.veh_count').html(response.veh_count);
               }

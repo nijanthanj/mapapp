@@ -83,35 +83,35 @@
         <div class="right_col" role="main">
           <!-- top tiles -->          
           <div class="row tile_count">
-            <div class="col-md-3 tile_stats_count">
-              <span class="count_top"><i class="fa fa-user"></i> Total Vehicle</span>
+            <div class="col-md-1 tile_stats_count">
+              <span class="count_top"><i class="fa fa-user"></i> Total</span>
               <div class="count veh_count">0</div>              
             </div>
-            <div class="col-md-3 tile_stats_count">
-              <span class="count_top"><i class="fa fa-user"></i> Online Drivers</span>
-              <div class="count online_driver">0</div>              
+            <div class="col-md-1 tile_stats_count">
+              <span class="count_top"><i class="fa fa-user"></i> Online</span>
+              <div class="count online_vehicles">0</div>              
             </div>
-            <div class="col-md-3 tile_stats_count">
-              <span class="count_top"><i class="fa fa-user"></i> Offline Drivers</span>
-              <div class="count offline_driver">0</div>              
+            <div class="col-md-1 tile_stats_count">
+              <span class="count_top"><i class="fa fa-user"></i> Offline </span>
+              <div class="count offline_vehicles">0</div>              
             </div>
-            <div class="col-md-3 tile_stats_count">
-              <span class="count_top"><i class="fa fa-user"></i> En route</span>
+            <div class="col-md-1 tile_stats_count">
+              <span class="count_top"><i class="fa fa-user"></i> Enroute</span>
               <div class="count en_route">0</div>              
             </div>
-            <div class="col-md-3">
+            <div class="col-md-1 tile_stats_count">
               <span class="count_top"><i class="fa fa-user"></i> Arrived</span>
-              <div style="font-size: 40px;font-weight: bold;padding-left: 10px;" class="count arrived">0</div>              
+              <div class="count arrived">0</div>              
             </div>
-            <div class="col-md-3 tile_stats_count">
+            <div class="col-md-1 tile_stats_count">
               <span class="count_top"><i class="fa fa-user"></i> Ontrip</span>
               <div class="count online_trip">0</div>              
             </div>
-            <div class="col-md-3 tile_stats_count">
+            <div class="col-md-2 tile_stats_count">
               <span class="count_top"><i class="fa fa-user"></i> Cancelled Trips</span>
               <div class="count online_trip">0</div>              
             </div>
-            <div class="col-md-3 tile_stats_count">
+            <div class="col-md-2 tile_stats_count">
               <span class="count_top"><i class="fa fa-money"></i> Total Collections</span>
               <div class="count">&#8377;<span class="count tot_rate">0</span></div>              
             </div>            
