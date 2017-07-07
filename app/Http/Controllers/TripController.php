@@ -23,7 +23,7 @@ class TripController extends Controller
             ->select('trip.*', 'users.user_fname', 'users.user_lname', 'users.mobile')  
             ->orderby('trip.trip_id', 'desc')          
             ->get();   
-      
+        
         return view('booking', ['booking_list' =>  $trip_details]);        
     }
 
@@ -72,22 +72,32 @@ class TripController extends Controller
         $where_veh = ['vehicle_status' => 'available'];
         $veh_list = $vehicle_model::where($where_veh)->get();  
         $driverlist = [];
-
+        $vehiclelist = [];
         foreach ($veh_list as $key => $value) {
             $vehiclelist[$value->vehicle_id] = $this->distance($request->autocomplete1, $value->address, "K");
         }   
 
         if(count($veh_list)){
-            asort($vehiclelist);            
-            $getvehicle = array_keys($vehiclelist);
-            foreach ($veh_list as $key => $value) {
-               if($getvehicle[0] == $value->vehicle_id){
-                 $final_driver = $value->user_id;
-               }
-            }
+            asort($vehiclelist);      
+            $getvehicle = array_keys($vehiclelist);  
+            $getkm = array_values($vehiclelist); 
+            if($getkm[0] <= 3){                
+                foreach ($veh_list as $key => $value) {
+                   if($getvehicle[0] == $value->vehicle_id){
+                     $final_driver = $value->user_id;
+                   }
+                }
 
-            $where_driver = ['user_id' => $final_driver];
-            $driverdetails = $register::where($where_driver)->get();
+                $where_driver = ['user_id' => $final_driver];
+                $driverdetails = $register::where($where_driver)->get();
+            }else{
+                $res = [
+                'km' => $vehiclelist,
+                'success' => '',
+                'error' => 'No vehicles near you now, Try after some time'
+                ];
+                return json_encode($res);
+            }
         }else{
             $res = [
                 'success' => '',
@@ -139,23 +149,28 @@ class TripController extends Controller
         return json_encode($res);
     }   
 
-    public function distance($origin, $destination, $mode) {
-          
+    public function distance($origin, $destination, $mode) {     
+
         $url = 'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&mode=driving&key=AIzaSyBlrdksW4BHONkIuE4Cs0dMucG-uQiQHxk&origins='.str_replace(' ', '', $origin).'&destinations='.str_replace(' ', '', $destination);
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $data = curl_exec($ch);
-        curl_close($ch);        
+        
+        curl_setopt($ch, CURLOPT_URL, $url);          
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);        
+        $data = curl_exec($ch);             
         $data = utf8_decode($data);
         $obj = json_decode($data);
-        if($mode == 'k'){
+        curl_close($ch);   
+        
+        if($mode == 'k' && $obj->rows[0]->elements[0]->status != 'NOT_FOUND'){
             $result = explode(' ', $obj->rows[0]->elements[0]->distance->text);
             return $result[0];            
-        }else{
+        }else if($obj->rows[0]->elements[0]->status != 'NOT_FOUND'){            
             $result = explode(' ', $obj->rows[0]->elements[0]->duration->text);            
             return $result[0];            
-        }        
+        }else{
+            $km = 1;
+            return $km;
+        }
         
     }
 
@@ -296,8 +311,7 @@ class TripController extends Controller
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         
         //execute post
-        $result = curl_exec($ch);
-
+        $result = curl_exec($ch);        
         //close connection
         curl_close($ch);
 

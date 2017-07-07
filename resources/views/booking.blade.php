@@ -41,7 +41,7 @@
                                               <span class="upper badge bg-darkbluebg">{{$booking_list->trip_status}}</span>                                          
                                           @elseif ($booking_list->trip_status == 'accepted')
                                               <span class="upper badge bg-yellow">{{$booking_list->trip_status}}</span>                                          
-                                          @elseif ($booking_list->trip_status == 'driver_arrived')
+                                          @elseif ($booking_list->trip_status == 'trip_started')
                                               <span class="upper badge bg-orange">Trip started</span>
                                           @elseif ($booking_list->trip_status == 'dest_reached')
                                               <span class="upper badge bg-green">Completed</span>

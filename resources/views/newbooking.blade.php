@@ -38,7 +38,7 @@
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBlrdksW4BHONkIuE4Cs0dMucG-uQiQHxk&libraries=places"
         async defer></script>
 <script type="text/javascript"> 
-    jQuery('#error').hide();
+    jQuery('#error').hide();    
     var book_clear = 'false';
     function book(){
         $('#book').attr('disabled','disabled');
@@ -98,8 +98,7 @@
 
   function initialize(idspecific) {
   
-    var options = {               
-          types: ['geocode'],          
+    var options = {        
           componentRestrictions: {country: 'in'}
     };
     var input = document.getElementById(idspecific);
@@ -138,10 +137,12 @@
             var detail = myLatLng.fieldId[i].user_fname+' '+myLatLng.fieldId[i].user_lname+' '+myLatLng.fieldId[i].vehicle_reg_no+' '+myLatLng.fieldId[i].mobile;
             createMarker(myobj,detail);
         }
-        function createMarker(place,detail) {            
+        function createMarker(place,detail) { 
+          var icon = "<?php echo url('/').'/images/'; ?>"+'available.png';                           
           var marker = new google.maps.Marker({
             position: place,
             map: map,
+            icon: icon,
             title: detail
           });
        }

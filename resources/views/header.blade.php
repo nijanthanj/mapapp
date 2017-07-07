@@ -112,7 +112,7 @@
               <div class="count online_trip">0</div>              
             </div>
             <div class="col-md-2 tile_stats_count">
-              <span class="count_top"><i class="fa fa-money"></i> Total Collections</span>
+              <span class="count_top"><i class="fa fa-money"></i> Today's Collections</span>
               <div class="count">&#8377;<span class="count tot_rate">0</span></div>              
             </div>            
           </div>

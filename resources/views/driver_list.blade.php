@@ -79,7 +79,7 @@
       </div>
       <div class="modal-footer">        
         <button type="button" class="btn btn-success" onclick="approve($('.modal-body #email').val(),'approved');">Approve</button>
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="close btn btn-default" data-dismiss="modal">Close</button>
       </div>
     </div>
 
@@ -99,9 +99,10 @@ $(document).on("click", "#callmodal", function () {
         }else if(status != 'approved'){
             var reg_no = 'some';
         }
-        if(reg_no){
+        if(reg_no){            
             var con = confirm("Are you sure to do the action");
-            if(con == true){        
+            if(con == true){    
+            $('.close').click();    
             var successurl = '<?php echo URL::to('/');?>'+'/drivers';
                 var apiurl = '<?php echo URL::to('/');?>'+'/aprrove';
                 var data = {email : email,
@@ -116,6 +117,8 @@ $(document).on("click", "#callmodal", function () {
                     location.href = successurl;                    
                     }
                 });
+            }else{
+                $('.close').click();
             }
         }
     }    
