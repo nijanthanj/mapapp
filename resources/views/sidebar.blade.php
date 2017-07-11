@@ -34,7 +34,8 @@
                   <li><a><span><i class="fa fa-home"></i>Booking <i class="pull-right fa fa-chevron-down"></i></span></a>
                     <ul class="nav child_menu">
                       <li><a href="<?php echo url('/').'/newbooking'; ?>">New Booking</a></li>    
-                      <li><a href="<?php echo url('/').'/booking'; ?>">Booking History</a></li> 
+                      <li><a href="<?php echo url('/').'/booking/all'; ?>">Booking History</a></li> 
+                      <li><a href="<?php echo url('/').'/vehicles/all'; ?>">Vehicles List</a></li> 
                     </ul>
                   </li>
                   <li><a><span><i class="fa fa-calendar"></i>Request <i class="pull-right fa fa-chevron-down"></i></span></a>

@@ -83,34 +83,48 @@
         <div class="right_col" role="main">
           <!-- top tiles -->          
           <div class="row tile_count">
-            <div class="col-md-1 tile_stats_count">
-              <span class="count_top"><i class="fa fa-user"></i> Total</span>
-              <div class="count veh_count">0</div>              
-            </div>
-            <div class="col-md-1 tile_stats_count">
-              <span class="count_top"><i class="fa fa-user"></i> Available</span>
-              <div class="count online_vehicles">0</div>              
-            </div>
-            <div class="col-md-2 tile_stats_count">
-              <span class="count_top"><i class="fa fa-user"></i> Not available </span>
-              <div class="count offline_vehicles">0</div>              
-            </div>
-            <div class="col-md-1 tile_stats_count">
-              <span class="count_top"><i class="fa fa-user"></i> Enroute</span>
-              <div class="count en_route">0</div>              
-            </div>
-            <div class="col-md-1 tile_stats_count">
-              <span class="count_top"><i class="fa fa-user"></i> Arrived</span>
-              <div class="count arrived">0</div>              
-            </div>
-            <div class="col-md-1 tile_stats_count">
-              <span class="count_top"><i class="fa fa-user"></i> Ontrip</span>
-              <div class="count online_trip">0</div>              
-            </div>
-            <div class="col-md-2 tile_stats_count">
-              <span class="count_top"><i class="fa fa-user"></i> Cancelled Trips</span>
-              <div class="count online_trip">0</div>              
-            </div>
+            <a href="<?php echo url('/').'/vehicles/all'; ?>">
+              <div class="col-md-1 tile_stats_count">
+                <span class="count_top"><i class="fa fa-user"></i> Total</span>
+                <div class="count veh_count">0</div>              
+              </div>
+            </a>
+            <a href="<?php echo url('/').'/vehicles/available'; ?>">
+              <div class="col-md-1 tile_stats_count">
+                <span class="count_top"><i class="fa fa-user"></i> Available</span>
+                <div class="count online_vehicles">0</div>              
+              </div>
+            </a>
+            <a href="<?php echo url('/').'/vehicles/notavailable'; ?>">
+              <div class="col-md-1 tile_stats_count">
+                <span class="count_top"><i class="fa fa-user"></i> Unavailable </span>
+                <div class="count offline_vehicles">0</div>              
+              </div>
+            </a>
+            <a href="<?php echo url('/').'/vehicles/ontrip'; ?>">
+              <div class="col-md-1 tile_stats_count">
+                <span class="count_top"><i class="fa fa-user"></i> Ontrip</span>
+                <div class="count online_trip">0</div>              
+              </div>
+            </a>
+            <a href="<?php echo url('/').'/booking/accepted'; ?>">
+              <div class="col-md-1 tile_stats_count">
+                <span class="count_top"><i class="fa fa-user"></i> Enroute</span>
+                <div class="count en_route">0</div>              
+              </div>
+            </a>
+            <a href="<?php echo url('/').'/booking/driver_arrived'; ?>">
+              <div class="col-md-1 tile_stats_count">
+                <span class="count_top"><i class="fa fa-user"></i> Arrived</span>
+                <div class="count arrived">0</div>              
+              </div>
+            </a>            
+            <a href="<?php echo url('/').'/booking/cancelled_user'; ?>">
+              <div class="col-md-2 tile_stats_count">
+                <span class="count_top"><i class="fa fa-user"></i> Cancelled Trips</span>
+                <div class="count online_trip">0</div>              
+              </div>
+            </a>            
             <div class="col-md-2 tile_stats_count">
               <span class="count_top"><i class="fa fa-money"></i> Today's Collections</span>
               <div class="count">&#8377;<span class="count tot_rate">0</span></div>              

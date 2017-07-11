@@ -16,15 +16,47 @@ use App\RateDescription;
 class TripController extends Controller
 {   
 
-    public function booking(Request $request)
+    public function booking($booking_status)
     {
-        $trip_details = DB::table('trip')
-            ->join('users', 'trip.user_id', '=', 'users.user_id')            
-            ->select('trip.*', 'users.user_fname', 'users.user_lname', 'users.mobile')  
-            ->orderby('trip.trip_id', 'desc')          
-            ->get();   
+        if($booking_status == 'accepted' || $booking_status == 'driver_arrived' || $booking_status == 'cancelled_user') {
+            $where_veh = ['trip_status' => $booking_status]; 
+            $trip_details = DB::table('trip')
+                ->join('users', 'trip.user_id', '=', 'users.user_id')            
+                ->select('trip.*', 'users.user_fname', 'users.user_lname', 'users.mobile')  
+                ->where($where_veh) 
+                ->orderby('trip.trip_id', 'desc')          
+                ->get();  
+        }else{
+            $trip_details = DB::table('trip')
+                ->join('users', 'trip.user_id', '=', 'users.user_id')            
+                ->select('trip.*', 'users.user_fname', 'users.user_lname', 'users.mobile')  
+                ->orderby('trip.trip_id', 'desc')          
+                ->get(); 
+        }    
         
         return view('booking', ['booking_list' =>  $trip_details]);        
+    }
+
+    public function vehicles($vehicle_status)
+    {
+        if($vehicle_status == 'available' || $vehicle_status == 'notavailable' || $vehicle_status == 'ontrip') {
+            $where_veh = ['vehicle_status' => $vehicle_status]; 
+            $trip_details = DB::table('vehicles')
+            ->join('users', 'vehicles.user_id', '=', 'users.user_id')            
+            ->select('vehicles.*', 'users.user_fname', 'users.user_lname', 'users.mobile') 
+            ->where($where_veh) 
+            ->orderby('vehicles.vehicle_id', 'desc')          
+            ->get();
+        }else{
+            $trip_details = DB::table('vehicles')
+            ->join('users', 'vehicles.user_id', '=', 'users.user_id')            
+            ->select('vehicles.*', 'users.user_fname', 'users.user_lname', 'users.mobile')             
+            ->orderby('vehicles.vehicle_id', 'desc')          
+            ->get();
+        }   
+           
+        
+        return view('vehicles', ['vehicle_list' =>  $trip_details]);        
     }
 
     public function newbooking(Request $request)
