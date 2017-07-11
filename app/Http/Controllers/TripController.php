@@ -261,8 +261,21 @@ class TripController extends Controller
             $trip_hist_model->save();
         if($result) {            
             if($request->trip_status == 'rejected_driver'){
-                    $where_veh = ['vehicle_status' => 'available'];
-                    $veh_list = $vehicle_model::where($where_veh)->get();  
+                    $reject_list_full = DB::table('trip_history')            
+                    ->select('user_id')
+                    ->where(['his_msg' => 'rejected_driver','trip_id' =>  $request->trip_id])
+                    ->get(); 
+
+                    $reject_list = [];
+                    foreach ($reject_list_full as $key => $value) {
+                        $reject_list[] = $value->user_id;
+                    }                                        
+                    
+                    $veh_list = DB::table('vehicles')                     
+                    ->where('vehicle_status', '=', 'available')
+                    ->whereNotIn('user_id', $reject_list)
+                    ->get();                     
+                    
                     $driverlist = [];
                     $vehiclelist = [];
 
@@ -284,11 +297,12 @@ class TripController extends Controller
                         $wheretrip = ['trip_id' =>  $request->trip_id];
                         $trip_model::where($wheretrip)->update(['vehicle_id' => $getvehicle[0] ,'driver_id' => $driverdetails[0]->user_id,'trip_status' => 'pending','driver_name' => $driverdetails[0]->user_fname.' '.$driverdetails[0]->user_lname,'driver_mobile' => $driverdetails[0]->mobile]);                        
                         $vehicle_model::where($where_driver)->update(['vehicle_status' => 'ontrip']);  
-                        $trip_hist_model->his_type = 'trip_status';
-                        $trip_hist_model->trip_id = $request->trip_id;  
-                        $trip_hist_model->user_id = $driverdetails[0]->user_id;
-                        $trip_hist_model->his_msg = 'pending';
-                        $trip_hist_model->save();
+                        $trip_his_model = new TripHistory();  
+                        $trip_his_model->his_type = 'trip_status';
+                        $trip_his_model->trip_id = $request->trip_id;  
+                        $trip_his_model->user_id = $driverdetails[0]->user_id;
+                        $trip_his_model->his_msg = 'pending';
+                        $trip_his_model->save();
                     }
             }      
             if($request->trip_status == 'dest_reached' || $request->trip_status == 'rejected_driver'){
