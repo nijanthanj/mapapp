@@ -322,7 +322,7 @@ class TripController extends Controller
     {
         $vehicle_model = new Vehicles();
         $where = ['user_id' => $request->driver_id];
-        $result = $vehicle_model::where($where)->update(['lat' => $request->lat,'lon' => $request->lon]);
+        $result = $vehicle_model::where($where)->update(['lat' => $request->lat,'lon' => $request->lon, 'address' => $request->address]);
         if($result){
         $res = [
                 'success' => 'coords updated successfully',

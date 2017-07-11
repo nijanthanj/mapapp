@@ -250,7 +250,7 @@ class SignupController extends Controller
 
         if($request->online_status == 'offline'){
             $vehstat = 'notavailable';
-        }else {
+        }else if($request->online_status == 'online'){
             $vehstat = 'available';
         }
 
