@@ -308,6 +308,9 @@ class TripController extends Controller
             if($request->trip_status == 'dest_reached' || $request->trip_status == 'rejected_driver'){
                 $where_up = ['user_id' => $request->driver_id];
                 $vehicle_model::where($where_up)->update(['vehicle_status' => 'available']);  
+            }else if($request->trip_status == 'accepted'){
+                $where_up = ['user_id' => $request->driver_id];
+                $vehicle_model::where($where_up)->update(['vehicle_status' => 'ontrip']);  
             }
             if($request->trip_status == 'trip_started'){
                 $trip_model::where($where)->update(['start_date' => date('Y-m-d H:i:s')]);
