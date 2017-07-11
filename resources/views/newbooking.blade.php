@@ -61,7 +61,7 @@
             $('#book').removeAttr('disabled');
         }else{        
             $('#book').attr('disabled','disabled');    
-            var successurl = '<?php echo URL::to('/');?>'+'/booking';
+            var successurl = '<?php echo URL::to('/');?>'+'/booking/all';
             var apiurl = '<?php echo URL::to('/');?>'+'/createbooking';
             var data = {fname : fname,
                         lname : lname,

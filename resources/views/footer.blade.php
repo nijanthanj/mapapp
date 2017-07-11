@@ -31,31 +31,23 @@
             url: apiurl,
             method: "GET",
             success: function(response){  
-                var response = JSON.parse(response); 
-                if(response.en_route){ 
+                var response = JSON.parse(response);                 
                   $('.en_route').html(response.en_route);
-                }
-                if(response.arrived){
+                
                   $('.arrived').html(response.arrived);
-                }
-                if(response.online_trip){
+                
                   $('.online_trip').html(response.online_trip);
-                }
-                if(response.cancelled_trip){
+                
                   $('.cancelled_trip').html(response.cancelled_trip);
-                }
-                if(response.online_vehicles){
+                
                   $('.online_vehicles').html(response.online_vehicles);
-                }
-                if(response.offline_vehicles){
+                
                   $('.offline_vehicles').html(response.offline_vehicles);
-                }
-                if(response.tot_rate){                
+                                
                   $('.tot_rate').html(response.tot_rate);
-                }
-                if(response.veh_count){
+                
                   $('.veh_count').html(response.veh_count);
-                }
+                
               }
           });  
       }

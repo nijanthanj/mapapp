@@ -254,7 +254,11 @@ class TripController extends Controller
         $where = ['driver_id' => $request->driver_id,'trip_id' =>  $request->trip_id];
         $result = $trip_model::where($where)->update(['trip_status' => $request->trip_status]);
         $pickup_details = $trip_model::where(['trip_id' =>  $request->trip_id])->get();
-
+            $trip_hist_model->his_type = 'trip_status';
+            $trip_hist_model->trip_id = $request->trip_id;  
+            $trip_hist_model->user_id = $request->driver_id;
+            $trip_hist_model->his_msg = $request->trip_status;
+            $trip_hist_model->save();
         if($result) {            
             if($request->trip_status == 'rejected_driver'){
                     $where_veh = ['vehicle_status' => 'available'];
@@ -280,9 +284,11 @@ class TripController extends Controller
                         $wheretrip = ['trip_id' =>  $request->trip_id];
                         $trip_model::where($wheretrip)->update(['vehicle_id' => $getvehicle[0] ,'driver_id' => $driverdetails[0]->user_id,'trip_status' => 'pending','driver_name' => $driverdetails[0]->user_fname.' '.$driverdetails[0]->user_lname,'driver_mobile' => $driverdetails[0]->mobile]);                        
                         $vehicle_model::where($where_driver)->update(['vehicle_status' => 'ontrip']);  
-                    }else{
-                        $wheretrip = ['trip_id' =>  $request->trip_id];
-                        $trip_model::where($wheretrip)->update(['vehicle_id' => $getvehicle[0] ,'driver_id' => $driverdetails[0]->user_id,'trip_status' => 'rejected_driver','driver_name' => $driverdetails[0]->user_fname.' '.$driverdetails[0]->user_lname,'driver_mobile' => $driverdetails[0]->mobile]);                        
+                        $trip_hist_model->his_type = 'trip_status';
+                        $trip_hist_model->trip_id = $request->trip_id;  
+                        $trip_hist_model->user_id = $driverdetails[0]->user_id;
+                        $trip_hist_model->his_msg = 'pending';
+                        $trip_hist_model->save();
                     }
             }      
             if($request->trip_status == 'dest_reached' || $request->trip_status == 'rejected_driver'){
@@ -297,10 +303,7 @@ class TripController extends Controller
                 $fare = $pickup_details[0]->fare + ($duration*0.5);
                 $trip_model::where($where)->update(['end_date' => date('Y-m-d H:i:s'), 'duration' => $duration, 'fare' => round($fare)]);
             }  
-            $trip_hist_model->his_type = 'trip_status';
-            $trip_hist_model->user_id = $request->driver_id;
-            $trip_hist_model->his_msg = $request->trip_status;
-            $trip_hist_model->save();
+            
             $res = [
                 'success' => 'Status updated successfully',
                 'error' => ''
