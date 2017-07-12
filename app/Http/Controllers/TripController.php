@@ -308,13 +308,17 @@ class TripController extends Controller
             if($request->trip_status == 'dest_reached' || $request->trip_status == 'rejected_driver'){
                 $where_up = ['user_id' => $request->driver_id];
                 $vehicle_model::where($where_up)->update(['vehicle_status' => 'available']);  
-            }else if($request->trip_status == 'accepted'){
+            }
+            if($request->trip_status == 'accepted'){
                 $where_up = ['user_id' => $request->driver_id];
                 $vehicle_model::where($where_up)->update(['vehicle_status' => 'ontrip']);  
             }
             if($request->trip_status == 'trip_started'){
                 $trip_model::where($where)->update(['start_date' => date('Y-m-d H:i:s')]);
-            }  
+            }
+            if($request->trip_status == 'driver_arrived'){
+                $trip_model::where($where)->update(['fare' => 25]);
+            }   
             if($request->trip_status == 'dest_reached'){
                 $duration = round((strtotime(date('Y-m-d H:i:s'))-strtotime($pickup_details[0]->start_date)) / 60);
                 $fare = $pickup_details[0]->fare + ($duration*0.5);
