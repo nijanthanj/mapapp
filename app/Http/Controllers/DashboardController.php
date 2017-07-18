@@ -36,6 +36,17 @@ class DashboardController extends Controller
         return json_encode($driver_location);
     }
 
+    public function ad(Request $request)
+    {     
+        $ad_url = ["https://youtu.be/vdbvq9FEVqs",
+                    "http://tamilculture.com/wp-content/uploads/2015/05/Pothys-Event-1.jpg",
+                    "https://pbs.twimg.com/media/CRA5TgSUEAAWsPE.jpg",
+                    "https://youtu.be/jB-o2kKDqF8"
+        ];
+        $res = ['status' => 'success', 'data' => $ad_url];
+        return json_encode($res);
+    }
+
 
     public function dashboard(Request $request)
     {
