@@ -355,7 +355,13 @@ class SignupController extends Controller
         if($result[0]->permit) $result[0]->permit = $custom_url.'/app/'.$result[0]->permit;
         if($result[0]->license) $result[0]->license = $custom_url.'/app/'.$result[0]->license;
         if($result[0]->profile_photo) $result[0]->profile_photo = $custom_url.'/app/'.$result[0]->profile_photo;
-        return $result;
+        
+        if(count($result)){            
+             $res = ['status' => 'success', 'data' => $result];
+        }else{
+            $res = ['status' => 'nodata', 'data' => $result];
+        }
+        return $res;
     }
 
     public function users_profile($user_id)

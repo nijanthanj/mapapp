@@ -406,8 +406,13 @@ class TripController extends Controller
         
         $bar_rate['sum'] = DB::select          
             ("SELECT sum(fare) as fare,sum(km) as km FROM trip WHERE driver_id = ".$request->driver_id." AND WEEKOFYEAR(created_at) = WEEKOFYEAR(NOW())");
-                
-        return $bar_rate;
+        
+        if(count($bar_rate)){            
+             $res = ['status' => 'success', 'data' => $bar_rate];
+        }else{
+            $res = ['status' => 'nodata', 'data' => $bar_rate];
+        }
+        return $res;
     }
 
     public function driver_trip_history(Request $request)
