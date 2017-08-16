@@ -15,7 +15,6 @@ Route::get('/', 'DashboardController@login');
 Route::get('/welcome', 'DashboardController@welcome');
 Route::get('/dashboard', 'DashboardController@dashboard');
 Route::get('/welcomemap', 'DashboardController@welcomemap');
-Route::post('/ad', 'DashboardController@ad');
 
 Route::get('/booking/{booking_status}', 'TripController@booking');
 Route::get('/vehicles/{vehicle_status}', 'TripController@vehicles');
@@ -33,6 +32,9 @@ Route::post('/forgot', 'SignupController@forgot');
 Route::post('/aprrove', 'SignupController@aprrove');
 Route::post('/status', 'SignupController@status');
 Route::post('/user_account_details', 'SignupController@user_account_details');
+Route::post('/rating', 'SignupController@rating');
+Route::post('/invite_code', 'SignupController@invite_code');
+
 
 Route::post('/trip_notify', 'TripController@trip_notify');
 Route::post('/trip_notify_driver', 'TripController@trip_notify_driver');
@@ -40,7 +42,9 @@ Route::post('/createbooking', 'TripController@createbooking');
 Route::post('/vehicle_coords', 'TripController@vehicle_coords');
 Route::post('/sendsms', 'TripController@sendsms');
 Route::post('/weekbar', 'TripController@weekbar');
+Route::post('/weekly_report', 'TripController@weekly_report');
 Route::post('/driver_trip_history', 'TripController@driver_trip_history');
 Route::post('/trip_deatils', 'TripController@trip_notify');
 Route::post('/trip_status', 'TripController@trip_status');
+
 

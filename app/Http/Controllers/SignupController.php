@@ -12,6 +12,7 @@ use App\Register;
 use App\City;
 use App\Trip;
 use App\Vehicles;
+use App\Rating;
 use Mail;
 
 class SignupController extends Controller
@@ -345,8 +346,9 @@ class SignupController extends Controller
     }
 
     public function user_account_details(Request $request)
-    {
+    {        
         $register = new Register();        
+        $trip_model = new Trip();    
         $where = ['user_id' => $request->user_id];
         $result = $register::where($where)->get();        
         $custom_url =  str_replace('public','storage',url('/'));
@@ -356,7 +358,16 @@ class SignupController extends Controller
         if($result[0]->license) $result[0]->license = $custom_url.'/app/'.$result[0]->license;
         if($result[0]->profile_photo) $result[0]->profile_photo = $custom_url.'/app/'.$result[0]->profile_photo;
         
-        if(count($result)){            
+        if(count($result)){  
+            if($result[0]->user_type == 'rider'){
+            $wheretrip = ['user_id' => $request->user_id];
+            }else{
+                $wheretrip = ['driver_id' => $request->user_id];
+            }
+            $trip_details = $trip_model::where($wheretrip)->count();        
+             
+             $result[0]->total_trip = $trip_details;
+             $result[0]->total_rating = 5;
              $res = ['status' => 'success', 'data' => $result];
         }else{
             $res = ['status' => 'nodata', 'data' => $result];
@@ -392,5 +403,34 @@ class SignupController extends Controller
        }
        
         return view('user_profile', ['user_data' =>  $result[0], 'trip_details' =>  $trip_details]);        
+    }
+
+    public function rating(Request $request)
+    {
+        $rating = new Rating();        
+        $rating->trip_id =  $request->trip_id;
+        $rating->rated_by = $request->rated_by; 
+        $rating->rating_to = $request->rating_to; 
+        $rating->user_type  = $request->user_type;  
+        $rating->rate = $request->rate; 
+        $rating->rating_comment = $request->rating_comment; 
+        
+        if($rating->save()){
+            $res = [
+                'success' => 'Updated successfully',
+                'error' => ''
+            ];   
+        }else{
+            $res = [
+                'success' => '',
+                'error' => 'Internal error'
+            ]; 
+        }
+        return json_encode($res);
+    }
+    public function invite_code(Request $request)
+    {
+        $res = 'UNGALAUTO'.$request->driver_id;
+        return $res;
     }
 }

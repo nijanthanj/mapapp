@@ -401,10 +401,36 @@ class TripController extends Controller
         $bar_rate = array();
 
         foreach ($bar_rate_full as $key => $value) {
-                $bar_rate[$value->updated_at] = DB::select("SELECT sum(fare) as fare,sum(km) as km FROM trip WHERE driver_id = ".$request->driver_id." AND updated_at >= '".$value->updated_at." 00:00:00' AND updated_at <= '".$value->updated_at." 23:59:59'");
-        }
-        
+                $some = DB::select("SELECT sum(fare) as fare,sum(km) as km FROM trip WHERE driver_id = ".$request->driver_id." AND updated_at >= '".$value->updated_at." 00:00:00' AND updated_at <= '".$value->updated_at." 23:59:59'");
+                $bar_rate[$key]['fare'] = $some['0']->fare;
+                $bar_rate[$key]['km'] = $some['0']->km;
+                $bar_rate[$key]['date'] = $value->updated_at;
+        }        
+
         $bar_rate['sum'] = DB::select          
+            ("SELECT sum(fare) as fare,sum(km) as km FROM trip WHERE driver_id = ".$request->driver_id." AND WEEKOFYEAR(created_at) = WEEKOFYEAR(NOW())");
+        
+        if(count($bar_rate)){            
+             $res = ['status' => 'success', 'data' => $bar_rate];
+        }else{
+            $res = ['status' => 'nodata', 'data' => $bar_rate];
+        }
+        return $res;
+    }
+
+    public function weekly_report(Request $request)
+    {
+        $trip_model = new Trip();            
+        
+        $bar_rate = array();        
+        
+        $bar_rate['bfr_prev_week'] = DB::select          
+            ("SELECT sum(fare) as fare,sum(km) as km FROM trip WHERE driver_id = ".$request->driver_id." AND WEEKOFYEAR(created_at) = WEEKOFYEAR(NOW())-2 ");
+        
+        $bar_rate['prev_week'] = DB::select          
+            ("SELECT sum(fare) as fare,sum(km) as km FROM trip WHERE driver_id = ".$request->driver_id." AND WEEKOFYEAR(created_at) = WEEKOFYEAR(NOW())-1 ");
+        
+        $bar_rate['current_week'] = DB::select          
             ("SELECT sum(fare) as fare,sum(km) as km FROM trip WHERE driver_id = ".$request->driver_id." AND WEEKOFYEAR(created_at) = WEEKOFYEAR(NOW())");
         
         if(count($bar_rate)){            
