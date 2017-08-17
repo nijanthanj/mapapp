@@ -430,7 +430,11 @@ class SignupController extends Controller
     }
     public function invite_code(Request $request)
     {
-        $res = 'UNGALAUTO'.$request->driver_id;
-        return $res;
+        $register = new Register(); 
+        $where = ['user_id' => $request->driver_id];
+        $result = $register::where($where)->pluck('user_fname');
+        
+        $res = ['invite' => $result[0].'_'.$request->driver_id];
+        return json_encode($res);
     }
 }
