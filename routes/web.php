@@ -43,6 +43,7 @@ Route::post('/vehicle_coords', 'TripController@vehicle_coords');
 Route::post('/sendsms', 'TripController@sendsms');
 Route::post('/weekbar', 'TripController@weekbar');
 Route::post('/weekly_report', 'TripController@weekly_report');
+Route::post('/weekly_report_range', 'TripController@weekly_report_range');
 Route::post('/driver_trip_history', 'TripController@driver_trip_history');
 Route::post('/trip_deatils', 'TripController@trip_notify');
 Route::post('/trip_status', 'TripController@trip_status');

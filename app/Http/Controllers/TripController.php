@@ -11,6 +11,7 @@ use App\Register;
 use App\Trip;
 use App\TripHistory;
 use App\Vehicles;
+use App\Rating;
 use App\RateDescription;
 
 class TripController extends Controller
@@ -342,7 +343,13 @@ class TripController extends Controller
     public function sendsms(Request $request){
         return $this->sms($request->number,$request->msg);
     }
-
+    public function username($user_id){
+        $register = new Register();        
+        $where = ['user_id' => $user_id];
+        $result = $register::where($where)->get();
+        
+        return $result['0']->user_fname.' '.$result['0']->user_lname;
+    }
     public function sms($number, $msg)
     {
         $url = 'http://bhashsms.com/api/sendmsg.php';
@@ -397,7 +404,7 @@ class TripController extends Controller
     {
         $trip_model = new Trip();            
         $bar_rate_full = DB::select          
-            ("SELECT fare,km,date(updated_at) as updated_at FROM trip WHERE driver_id = ".$request->driver_id." AND WEEKOFYEAR(created_at) = WEEKOFYEAR(NOW())");
+            ("SELECT fare,km,date(updated_at) as updated_at FROM trip WHERE driver_id = ".$request->driver_id." AND WEEKOFYEAR(created_at) >= WEEKOFYEAR(NOW())-2");
         $bar_rate = array();
 
         foreach ($bar_rate_full as $key => $value) {
@@ -408,7 +415,7 @@ class TripController extends Controller
         }        
 
         $bar_rate['sum'] = DB::select          
-            ("SELECT sum(fare) as fare,sum(km) as km FROM trip WHERE driver_id = ".$request->driver_id." AND WEEKOFYEAR(created_at) = WEEKOFYEAR(NOW())");
+            ("SELECT sum(fare) as fare,sum(km) as km FROM trip WHERE driver_id = ".$request->driver_id." AND WEEKOFYEAR(created_at) >= WEEKOFYEAR(NOW())-2");
         
         if(count($bar_rate)){            
              $res = ['status' => 'success', 'data' => $bar_rate];
@@ -421,24 +428,119 @@ class TripController extends Controller
     public function weekly_report(Request $request)
     {
         $trip_model = new Trip();            
+        $rating = new Rating();
+        $bar_rate = array();    
         
-        $bar_rate = array();        
+        $bfr_pre_week =  DB::select          
+            ("SELECT count(*) as count,sum(rate) as rate FROM rating WHERE rating_to = ".$request->driver_id." AND WEEKOFYEAR(created_at) = WEEKOFYEAR(NOW())-2 ");
+            
+        $prev_week = DB::select          
+            ("SELECT count(*) as count,sum(rate) as rate FROM rating WHERE rating_to = ".$request->driver_id." AND WEEKOFYEAR(created_at) = WEEKOFYEAR(NOW())-1 ");
         
-        $bar_rate['bfr_prev_week'] = DB::select          
-            ("SELECT sum(fare) as fare,sum(km) as km FROM trip WHERE driver_id = ".$request->driver_id." AND WEEKOFYEAR(created_at) = WEEKOFYEAR(NOW())-2 ");
-        
-        $bar_rate['prev_week'] = DB::select          
-            ("SELECT sum(fare) as fare,sum(km) as km FROM trip WHERE driver_id = ".$request->driver_id." AND WEEKOFYEAR(created_at) = WEEKOFYEAR(NOW())-1 ");
-        
-        $bar_rate['current_week'] = DB::select          
-            ("SELECT sum(fare) as fare,sum(km) as km FROM trip WHERE driver_id = ".$request->driver_id." AND WEEKOFYEAR(created_at) = WEEKOFYEAR(NOW())");
-        
+        $current_week = DB::select          
+            ("SELECT count(*) as count,sum(rate) as rate FROM rating WHERE rating_to = ".$request->driver_id." AND WEEKOFYEAR(created_at) = WEEKOFYEAR(NOW())");
+
+        if($current_week[0]->count){
+            $bar_rate[0]['rate'] = round($current_week[0]->rate/$current_week[0]->count);
+        }else{
+            $bar_rate[0]['rate'] = 0;
+        }
+        $week_number  = date("W", strtotime('now'));        
+        $prev_week_number  = $week_number -1;
+        $bfr_pre_week_number  = $prev_week_number -1;
+        $year_number  = date("o", strtotime('now'));
+        if($week_number<=9)
+        {
+          $week_number= "0".$week_number; 
+        }
+        if($prev_week_number<=9)
+        {
+          $prev_week_number= "0".$prev_week_number; 
+        }
+        if($bfr_pre_week_number<=9)
+        {
+          $bfr_pre_week_number= "0".$bfr_pre_week_number; 
+        }
+
+        $lastmonday = $bar_rate['0']['from'] = date('Y-m-d', strtotime("$year_number-W$week_number"));         
+        $bar_rate['0']['to'] = date("Y-m-d", strtotime("$lastmonday +6 days"));
+        $bar_rate['0']['week'] = 'current_week';
+
+        if($prev_week[0]->count){
+            $bar_rate[1]['rate'] = round($prev_week[0]->rate/$prev_week[0]->count);
+        }else{
+            $bar_rate[1]['rate'] = 0;
+        }
+        $lastmonday = $bar_rate['1']['from'] = date('Y-m-d', strtotime("$year_number-W$prev_week_number"));         
+        $bar_rate['1']['to'] = date("Y-m-d", strtotime("$lastmonday +6 days"));
+        $bar_rate['1']['week'] = 'prev_week';
+
+        if($bfr_pre_week[0]->count){
+            $bar_rate[2]['rate'] = round($bfr_pre_week[0]->rate/$bfr_pre_week[0]->count);    
+        }else{
+            $bar_rate[2]['rate'] = 0;
+        }
+        $lastmonday = $bar_rate['2']['from'] = date('Y-m-d', strtotime("$year_number-W$bfr_pre_week_number"));         
+        $bar_rate['2']['to'] = date("Y-m-d", strtotime("$lastmonday +6 days"));
+        $bar_rate['2']['week'] = 'bfr_pre_week';
+
         if(count($bar_rate)){            
              $res = ['status' => 'success', 'data' => $bar_rate];
         }else{
             $res = ['status' => 'nodata', 'data' => $bar_rate];
         }
-        return $res;
+
+        return json_encode($res);
+    }
+
+    public function weekly_report_range(Request $request)
+    {
+        $trip_model = new Trip();            
+        $rating = new Rating();
+        $bar_rate = array();            
+        
+        $current_week = DB::select          
+            ("SELECT count(*) as count,sum(rate) as rate FROM rating WHERE rating_to = ".$request->driver_id." AND created_at BETWEEN '".$request->from."' AND '".$request->to." 23:59:59'");
+        $bar_rate[0]['from'] = $request->from;
+        $bar_rate[0]['to'] = $request->to;
+        $tot_trips = DB::select          
+            ("SELECT count(*) as count FROM trip WHERE driver_id = ".$request->driver_id." AND created_at BETWEEN '".$request->from."' AND '".$request->to." 23:59:59'");
+        $bar_rate[0]['tot_trips'] = $tot_trips['0']->count;
+        $bar_rate[0]['rated_trips'] = $current_week[0]->count;
+
+        $full_star_trips = DB::select          
+            ("SELECT count(*) as count FROM rating WHERE rating_to = ".$request->driver_id." AND rate > 4");
+        
+        $bar_rate[0]['full_star_trips'] = $full_star_trips['0']->count;
+
+        $bad_comments_res = array();
+        $good_comments_res = array();
+        $bad_comments = DB::select          
+            ("SELECT rating_comment,rated_by,trip_id FROM rating WHERE rating_to = ".$request->driver_id." AND rate <= 2");
+        foreach ($bad_comments as $key => $value) {
+            $bad_comments_res[] = $this->username($value->rated_by).' commented as '.$value->rating_comment;
+        }
+        $bar_rate[0]['bad_comments'] = $bad_comments_res;
+
+        $good_comments = DB::select          
+            ("SELECT rating_comment,rated_by,trip_id FROM rating WHERE rating_to = ".$request->driver_id." AND rate >= 4");
+        foreach ($good_comments as $key => $value) {
+            $good_comments_res[] = $this->username($value->rated_by).' commented as '.$value->rating_comment;
+        }
+        $bar_rate[0]['good_comments'] = $good_comments_res;
+        if($current_week[0]->count){
+            $bar_rate[0]['rate'] = round($current_week[0]->rate/$current_week[0]->count);
+        }else{
+            $bar_rate[0]['rate'] = 0;
+        }        
+
+        if(count($bar_rate)){            
+             $res = ['status' => 'success', 'data' => $bar_rate];
+        }else{
+            $res = ['status' => 'nodata', 'data' => $bar_rate];
+        }
+
+        return json_encode($res);
     }
 
     public function driver_trip_history(Request $request)
